@@ -76,7 +76,7 @@ const Signup = () => {
                                                 >
                                                     {signupMutation.isLoading ? 'Signing up...' : 'Sign Up'}
                                                 </button>
-                                                <div class="flex items-center justify-between mt-4"><span class="w-1/5 border-b dark:border-gray-600 md:w-1/4"></span> <Link to="/signup" class="text-xs  text-gray-500 uppercase dark:text-gray-400 hover:underline">Create an account</Link> <span class="w-1/5 border-b dark:border-gray-600 md:w-1/4"></span></div>
+                                                <div class="flex items-center justify-between mt-4"><span class="w-1/5 border-b dark:border-gray-600 md:w-1/4"></span> <Link to="/" class="text-xs  text-gray-500 uppercase dark:text-gray-400 hover:underline">DO YOU HAVE AN ACCOUNT?</Link> <span class="w-1/5 border-b dark:border-gray-600 md:w-1/4"></span></div>
                                             </form>
                                         </div>
                                     </div>
