@@ -13,13 +13,9 @@ import SearchBar from '../../common/SearchBar';
 import Loading from '../../shared/Loading/Loading';
 
 
-const FeaturedBlogs = () => {
+const ItemList = () => {
 
     const [loading, setLoading] = useState(false);
-
-
-
-
 
     // sourcery skip: combine-object-destructuring
     const { isOpen: isShowModalOpen, onOpen: onShowModalOpen, onClose: onShowModalClose } = useDisclosure();
@@ -210,4 +206,4 @@ const FeaturedBlogs = () => {
     );
 };
 
-export default FeaturedBlogs;
+export default ItemList;
