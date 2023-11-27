@@ -1,11 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Tabs, TabList, TabPanels, Tab, TabPanel, useTab, useMultiStyleConfig, Button, Box,Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, useDisclosure } from '@chakra-ui/react'
-import { BiShowAlt } from 'react-icons/bi';
-import { MdAddchart } from 'react-icons/md';
-import { FiEdit3 } from 'react-icons/fi';
-import { RiDeleteBin6Line } from 'react-icons/ri';
-import Swal from 'sweetalert2';
-import { toast } from 'react-hot-toast';
+import { Tabs, TabList, TabPanels, TabPanel, useTab, useMultiStyleConfig, Box,Button } from '@chakra-ui/react'
+
+import UserList from '../user/UserList';
+import ItemList from '../items/ItemList';
 
 const Table = () => {
     const CustomTab = React.forwardRef((props, ref) => {
@@ -26,15 +23,19 @@ const Table = () => {
         )
       })
     return (
-        <div>
+        <div className=' h-screen table-bg'>
             <Tabs>
-      <TabList>
-        <CustomTab>One</CustomTab>
-        <CustomTab>Two</CustomTab>
-      </TabList>
+            <TabList justifyContent="center">
+      <CustomTab>User List</CustomTab>
+      <CustomTab>Item List</CustomTab>
+    </TabList>
       <TabPanels>
-        <TabPanel>1</TabPanel>
-        <TabPanel>2</TabPanel>
+        <TabPanel>
+            <UserList/>
+        </TabPanel>
+        <TabPanel>
+            <ItemList/>
+        </TabPanel>
       </TabPanels>
     </Tabs>
         </div>

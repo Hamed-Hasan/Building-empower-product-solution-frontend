@@ -28,7 +28,7 @@ const SearchBar = ({ searchQuery, setSearchQuery, handleSearch, loading }) => {
         <button
           type="submit"
           disabled={loading}
-          className="text-white absolute right-2.5 bottom-2.5 bg-primary hover:bg-warning focus:ring-4 focus:outline-none focus:ring-warning font-medium rounded-lg text-sm px-4 py-2 dark:hover:bg-primary dark:focus:ring-primary"
+          className="text-white absolute right-2.5 bottom-2.5 bg-primary hover:bg-warning focus:ring-4 focus:outline-none focus:ring-warning font-medium rounded-lg text-sm px-4 py-2 serach-btn dark:focus:ring-primary"
         >
           {loading ? 'Searching...' : 'Search'}
         </button>
