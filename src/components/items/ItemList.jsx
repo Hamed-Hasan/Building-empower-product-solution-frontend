@@ -1,54 +1,77 @@
 /* eslint-disable jsx-a11y/img-redundant-alt */
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useState, useEffect } from 'react';
-import '../Table/Table.css'
+import React from 'react';
+import '../Table/Table.css';
 import { BiShowAlt } from 'react-icons/bi';
 import { MdAddchart } from 'react-icons/md';
 import { FiEdit3 } from 'react-icons/fi';
 import { RiDeleteBin6Line } from 'react-icons/ri';
-import { Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, useDisclosure } from '@chakra-ui/react';
+import {
+  Button,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  Text,
+  useDisclosure,
+} from '@chakra-ui/react';
 import Swal from 'sweetalert2';
 import { toast } from 'react-hot-toast';
 import SearchBar from '../../common/SearchBar';
 import Loading from '../../shared/Loading/Loading';
-
+import { useGetItemsQuery } from '../../services/authQueries';
 
 const ItemList = () => {
+  const { data: items, isLoading, isError } = useGetItemsQuery();
 
-    const [loading, setLoading] = useState(false);
+  const { isOpen: isShowModalOpen, onOpen: onShowModalOpen, onClose: onShowModalClose } = useDisclosure();
+  const { isOpen: isAddModalOpen, onOpen: onAddModalOpen, onClose: onAddModalClose } = useDisclosure();
+  const { isOpen: isEditModalOpen, onOpen: onEditModalOpen, onClose: onEditModalClose } = useDisclosure();
 
-    // sourcery skip: combine-object-destructuring
-    const { isOpen: isShowModalOpen, onOpen: onShowModalOpen, onClose: onShowModalClose } = useDisclosure();
-    const { isOpen: isAddModalOpen, onOpen: onAddModalOpen, onClose: onAddModalClose } = useDisclosure();
-    const { isOpen: isEditModalOpen, onOpen: onEditModalOpen, onClose: onEditModalClose } = useDisclosure();
+  if (isLoading) return <Loading/>
+  if (isError) return <p>Error fetching items</p>;
 
-    const handleShowModal = () => {
-        onShowModalOpen();
-    };
+  const handleShowModal = () => {
+    onShowModalOpen();
+  };
 
-    const handleAddModal = () => {
-        onAddModalOpen();
-        // Implement any additional logic or state handling for the Add modal
-    };
+  const handleAddModal = () => {
+    onAddModalOpen();
+  };
 
-    const handleEditModal = () => {
-        onEditModalOpen();
-    };
+  const handleEditModal = () => {
+    onEditModalOpen();
+  };
 
+  const getBackgroundColor = (createdBy) => {
+    switch (createdBy) {
+      case 'admin':
+        return 'bg-green-400';
+      case 'super admin':
+        return 'bg-yellow-400';
+      case 'customer':
+        return 'bg-red-400';
+      default:
+        return '';
+    }
+  };
 
-
-
-
+  
+      
     return (
         <div className="flex justify-center">
             <div className="container mx-auto">
+    
 
                 {/* SearchBar component */}
                 <SearchBar
                     //   searchQuery={searchQuery}
                     //   setSearchQuery={setSearchQuery}
                     //   handleSearch={handleSearch}
-                    loading={loading}
+                    // loading={loading}
                 />
 
                 {/* {loading ? (
@@ -59,54 +82,50 @@ const ItemList = () => {
                     <div class="flex items-center justify-center  bg-gray-900">
                         <div class="col-span-12">
                             <div class="overflow-auto lg:overflow-visible ">
-                                <table class="blog-table text-gray-400 border-separate space-y-6 text-sm">
-                                    <thead class="bg-gray-800 text-gray-500">
-                                        <tr>
-                                            <th class="p-3">Brand</th>
-                                            <th class="p-3 text-left">Category</th>
-                                            <th class="p-3 text-left">Price</th>
-                                            <th class="p-3 text-left">Status</th>
-                                            <th class="p-3 text-left">Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
+                            <table className="blog-table text-gray-400 border-separate space-y-6 text-sm">
+  <thead className="bg-gray-800 text-gray-500">
+    <tr>
+      <th className="p-3">Index</th>
+      <th className="p-3 text-left">Name</th>
+      <th className="p-3 text-left">Date</th>
+      <th className="p-3 text-left">Author</th>
+      <th className="p-3 text-left">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    {items.data.map((item, index) => (
+      <tr key={item._id} className={index % 2 === 0 ? 'bg-gray-800' : ''}>
+        <td className="p-3">
+          <div className="flex align-items-center">
+            <div className="ml-3">
+              <div className="">{index + 1}</div>
+            </div>
+          </div>
+        </td>
+        <td className="p-3">{item.name}</td>
+        <td className="p-3">{new Date(item.created_at).toLocaleDateString()}</td>
+        <td className="p-3"> <span className={`text-gray-50 rounded-md px-2 ${getBackgroundColor(item.created_by)}`}>
+    {item.created_by}
+  </span> </td>
+        <td className="blog-td p-3 flex justify-start gap-5 items-center mt-3">
+            <a href="#" className="text-gray-400 hover:text-gray-100 mr-2" onClick={() => handleShowModal()}>
+                <BiShowAlt size={18} />
+            </a>
+            <a href="#" className="text-gray-400 hover:text-gray-100 ml-2" onClick={() => handleAddModal()}>
+                <MdAddchart />
+            </a>
+            <a href="#" className="text-gray-400 hover:text-gray-100 ml-2" onClick={() => handleEditModal()}>
+                <FiEdit3 />
+            </a>
+            <a href="#" className="text-gray-400 hover:text-gray-100 ml-2" onClick={() => handleDeleteBlog()}>
+                <RiDeleteBin6Line />
+            </a>
+        </td>
+      </tr>
+    ))}
+  </tbody>
+</table>
 
-                                        <tr class="bg-gray-800">
-                                            <td class="p-3">
-                                                <div class="flex align-items-center">
-
-                                                    <div class="ml-3">
-                                                        <div class="">Samsung</div>
-                                                        <div class="text-gray-500">mail@rgmail.com</div>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="p-3">
-                                                Technology
-                                            </td>
-                                            <td class="p-3 font-bold">
-                                                200.00$
-                                            </td>
-                                            <td class="p-3">
-                                                <span class="bg-yellow-400 text-gray-50  rounded-md px-2">start sale</span>
-                                            </td>
-                                            <td className="blog-td p-3 flex justify-start gap-5 items-center mt-3">
-                                                <a href="#" className="text-gray-400 hover:text-gray-100 mr-2" onClick={() => handleShowModal()}>
-                                                    <BiShowAlt size={18} />
-                                                </a>
-                                                <a href="#" className="text-gray-400 hover:text-gray-100 ml-2" onClick={() => handleAddModal()}>
-                                                    <MdAddchart />
-                                                </a>
-                                                <a href="#" className="text-gray-400 hover:text-gray-100 ml-2" onClick={() => handleEditModal()}>
-                                                    <FiEdit3 />
-                                                </a>
-                                                <a href="#" className="text-gray-400 hover:text-gray-100 ml-2" onClick={() => handleDeleteBlog()}>
-                                                    <RiDeleteBin6Line />
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
                             </div>
                         </div>
                     </div>

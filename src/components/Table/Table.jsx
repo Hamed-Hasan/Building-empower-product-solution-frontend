@@ -26,7 +26,7 @@ const Table = () => {
         )
       })
     return (
-        <div className=' h-screen table-bg'>
+        <div className='  table-bg'>
             <Tabs>
             <TabList justifyContent="center">
             <Tab color="white" fontWeight="700" _selected={{ color: '#E99400' }}>User List</Tab>
