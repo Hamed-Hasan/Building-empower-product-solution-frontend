@@ -4,8 +4,6 @@ import { useSignupMutation } from '../../services/authQueries';
 
 const Signup = () => {
 
-
-
     const signupMutation = useSignupMutation();
 
     const handleSignup = async (formData) => {
