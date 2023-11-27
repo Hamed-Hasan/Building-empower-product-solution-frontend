@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Tabs, TabList, TabPanels, TabPanel, useTab, useMultiStyleConfig, Box,Button } from '@chakra-ui/react'
+import { Tabs, TabList, TabPanels, TabPanel, useTab, useMultiStyleConfig, Box,Button, Tab } from '@chakra-ui/react'
 
 import UserList from '../user/UserList';
 import ItemList from '../items/ItemList';
+import { FcDownLeft,FcDownRight } from "react-icons/fc";
+
 
 const Table = () => {
     const CustomTab = React.forwardRef((props, ref) => {
@@ -16,7 +18,8 @@ const Table = () => {
         return (
           <Button __css={styles.tab} {...tabProps}>
             <Box as='span' mr='2'>
-              {isSelected ? '😎' : '😐'}
+              {isSelected ? <FcDownRight />: <FcDownLeft />
+}
             </Box>
             {tabProps.children}
           </Button>
@@ -26,8 +29,8 @@ const Table = () => {
         <div className=' h-screen table-bg'>
             <Tabs>
             <TabList justifyContent="center">
-      <CustomTab>User List</CustomTab>
-      <CustomTab>Item List</CustomTab>
+            <Tab color="white" fontWeight="700" _selected={{ color: '#E99400' }}>User List</Tab>
+      <Tab color="white" fontWeight="700" _selected={{ color: '#E99400' }}>Item List</Tab>
     </TabList>
       <TabPanels>
         <TabPanel>
