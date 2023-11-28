@@ -62,9 +62,9 @@ const Signup = () => {
     return (
         <>
             <div>
-                <div className="relative h-screen grid bg-black">
+                <div className="relative h-screen grid bg-[#0A0A0A]">
                     <div className="flex flex-col sm:flex-row items-center md:items-start sm:justify-center md:justify-start flex-auto min-w-0">
-                        <div className="relative sm:w-1/2 xl:w-3/5 bg-blue-500 h-full hidden md:flex flex-auto items-center justify-center p-10 overflow-hidden text-white bg-no-repeat bg-cover relative" style={{ backgroundImage: 'url(https://i.postimg.cc/mrgPMqpP/logo.png)' }}>
+                        <div className="relative sm:w-1/2 xl:w-3/5 bg-blue-500 h-full hidden md:flex flex-auto items-center justify-center p-10 overflow-hidden text-white bg-no-repeat bg-cover relative" style={{ backgroundImage: 'url(https://images.unsplash.com/photo-1511140973288-19bf21d7e771?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)' }}>
                             <div className="absolute bg-black opacity-25 inset-0 z-0"></div>
                             <div className="w-full lg:max-w-2xl md:max-w-md z-10 items-center text-center">
                                 <div className="font-bold leading-tight mb-6 mx-auto w-full content-center items-center"></div>

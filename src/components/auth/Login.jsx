@@ -4,6 +4,7 @@ import { useLoginMutation } from '../../services/authQueries';
 import { RiEyeFill, RiEyeOffFill } from 'react-icons/ri';
 import toast from 'react-hot-toast';
 import "../../styles/styles.css"
+import TypeWriter from '../../shared/TypeWriter/TypeWriter';
 
 
 const Login = () => {
@@ -52,11 +53,15 @@ const Login = () => {
                         <div className="absolute bg-black opacity-25 inset-0 z-0"></div>
                         <div className="w-full lg:max-w-2xl md:max-w-md z-10 items-center text-center">
                             <div className="font-bold leading-tight mb-6 mx-auto w-full content-center items-center">
-                                <h2 className='font-extrabold text-3xl'>
-                                   Gratest Project!
-                                </h2>
-                                <p className='font-normal text-left'>
-                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Magni nihil libero fugit tempore officiis aut dicta perferendis numquam consequatur, aliquid fugiat ducimus voluptates nostrum odit eaque quibusdam quia quaerat mollitia!
+                            
+                                <div className="flex items-center">
+                                <span className="text-6xl text-primary text-[#FFA001]">-</span>
+                               <div className='pb-6'>
+                               <TypeWriter />
+                               </div>
+                            </div>
+                                <p className='font-normal text-left opacity-80'>
+                                Embark on a coding odyssey with Arraytics! Conquer our JavaScript take-home exam by crafting an elegant MERN Shopping App. Securely separate frontend and backend, authenticate through APIs, showcase data with flair, and dockerize for seamless deployment. Keep it simple, impress at Arraytics!
                                 </p>
                             </div>
                         </div>

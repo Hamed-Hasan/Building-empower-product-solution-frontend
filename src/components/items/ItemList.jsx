@@ -122,7 +122,7 @@ const ItemList = () => {
         ) : (
           <>
             {/* Display table data here */}
-            <div class="flex items-center justify-center  bg-gray-900">
+            <div class="flex items-center justify-center  bg-gray-900 ">
               <div class="col-span-12">
                 <div class="overflow-x-auto ">
                   <table className="blog-table text-gray-400 border-separate space-y-6 text-sm">
