@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useLoginMutation } from '../../services/authQueries';
+import { RiEyeFill, RiEyeOffFill } from 'react-icons/ri';
 import toast from 'react-hot-toast';
 import "../../styles/styles.css"
 
@@ -11,43 +12,53 @@ const Login = () => {
     const loginMutation = useLoginMutation();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
 
     const handleLogin = async (e) => {
         e.preventDefault();
-      
+
         try {
-          setLoading(true);
-          const { data } = await loginMutation.mutateAsync({ email, password });
-      
-          // Display a success toast
-          toast.success(`Welcome back, ${data.user.name}!`, {
-            duration: 3000, // Duration of the toast in milliseconds
-          });
-      
-          console.log(data);
-          navigate('/table');
+            setLoading(true);
+            const { data } = await loginMutation.mutateAsync({ email, password });
+
+            // Display a success toast
+            toast.success(`Welcome back, ${data.user.name}!`, {
+                duration: 3000, // Duration of the toast in milliseconds
+            });
+
+            console.log(data);
+            navigate('/table');
         } catch (error) {
-          console.error(error);
-      
-          // Display an error toast
-          toast.error('Invalid credentials. Please try again.', {
-            duration: 3000,
-          });
+            console.error(error);
+
+            // Display an error toast
+            toast.error('Invalid credentials. Please try again.', {
+                duration: 3000,
+            });
         } finally {
-          setLoading(false);
+            setLoading(false);
         }
-      };
-      
-      
+    };
+
+    const togglePasswordVisibility = () => {
+        setShowPassword(!showPassword);
+    };
 
     return (
         <div>
-            <div className="relative h-screen grid bg-black">
+            <div className="relative h-screen grid bg-[#010001]">
                 <div className="flex flex-col sm:flex-row items-center md:items-start sm:justify-center md:justify-start flex-auto min-w-0">
-                    <div className="relative sm:w-1/2 xl:w-3/5 bg-blue-500 h-full hidden md:flex flex-auto items-center justify-center p-10 overflow-hidden text-white bg-no-repeat bg-cover relative" style={{ backgroundImage: 'url(https://i.postimg.cc/mrgPMqpP/logo.png)' }}>
+                    <div className="relative sm:w-1/2 xl:w-3/5 bg-blue-500 h-full hidden md:flex flex-auto items-center justify-center p-10 overflow-hidden text-white bg-no-repeat bg-cover relative" style={{ backgroundImage: 'url(https://images.unsplash.com/photo-1514254220549-515803732172?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)' }}>
                         <div className="absolute bg-black opacity-25 inset-0 z-0"></div>
                         <div className="w-full lg:max-w-2xl md:max-w-md z-10 items-center text-center">
-                            <div className="font-bold leading-tight mb-6 mx-auto w-full content-center items-center"></div>
+                            <div className="font-bold leading-tight mb-6 mx-auto w-full content-center items-center">
+                                <h2 className='font-extrabold text-3xl'>
+                                   Gratest Project!
+                                </h2>
+                                <p className='font-normal text-left'>
+                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Magni nihil libero fugit tempore officiis aut dicta perferendis numquam consequatur, aliquid fugiat ducimus voluptates nostrum odit eaque quibusdam quia quaerat mollitia!
+                                </p>
+                            </div>
                         </div>
                     </div>
 
@@ -65,25 +76,33 @@ const Login = () => {
                                                 placeholder="Write Your Email.."
                                                 className="border rounded-lg py-3 px-3 bg-black border-indigo-600 placeholder-white-500 text-white mb-3" />
                                             <label className="font-bold text-lg text-white">Password</label>
-                                            <input
-                                                type="password"
-                                                value={password}
-                                                onChange={(e) => setPassword(e.target.value)}
-                                                placeholder="Write Your Password.."
-                                                className="border rounded-lg py-3 px-3 mt-4 bg-black border-indigo-600 placeholder-white-500 text-white" />
+                                        
+                                            <div className="relative">
+                                                <input
+                                                    type={showPassword ? 'text' : 'password'}
+                                                    value={password}
+                                                    onChange={(e) => setPassword(e.target.value)}
+                                                    placeholder="Write Your Password.."
+                                                    className="border rounded-lg py-3 px-3 mt-4 bg-black border-indigo-600 placeholder-white-500 text-white w-full"
+                                                />
+                                                <div className="password-toggle" onClick={togglePasswordVisibility}>
+                                                    {showPassword ? <RiEyeOffFill /> : <RiEyeFill />}
+                                                </div>
+                                            </div>
+
                                             <button
                                                 type="submit"
                                                 className="border mt-12 border-indigo-600 bg-black text-white rounded-lg py-3 font-semibold relative"
                                                 disabled={loginMutation.isLoading}
                                             >
-                                            <div className='flex items-center justify-center'>
-                                                <div>
-                                                {loading && <div className="spinner"></div>}
+                                                <div className='flex items-center justify-center'>
+                                                    <div>
+                                                        {loading && <div className="spinner"></div>}
+                                                    </div>
+                                                    <div>
+                                                        {loginMutation.isLoading ? 'Logging in...' : 'Login'}
+                                                    </div>
                                                 </div>
-                                                <div>
-                                                {loginMutation.isLoading ? 'Logging in...' : 'Login'}
-                                                </div>
-                                            </div>
                                             </button>
 
                                             <div class="flex items-center justify-between mt-4"><span class="w-1/5 border-b dark:border-gray-600 md:w-1/4"></span> <Link to="/signup" class="text-xs  text-gray-500 uppercase dark:text-gray-400 hover:underline">Create an account</Link> <span class="w-1/5 border-b dark:border-gray-600 md:w-1/4"></span></div>

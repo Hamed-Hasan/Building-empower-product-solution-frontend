@@ -1,6 +1,7 @@
 import React from 'react';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
+import { RiEyeFill, RiEyeOffFill } from 'react-icons/ri';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSignupMutation } from '../../services/authQueries';
 import "../../styles/styles.css"
@@ -8,52 +9,55 @@ import "../../styles/styles.css"
 
 const Signup = () => {
     const [loading, setLoading] = useState(false);
+    const [password, setPassword] = useState('');
     const signupMutation = useSignupMutation();
+    const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate();
-
-
+  
     const handleSignup = async (formData) => {
-        try {
-          setLoading(true);
-          const { data } = await signupMutation.mutateAsync(formData);
-          console.log(data);
-    
-          // Display a success toast with a green background
-          toast.success(`Welcome, ${data.name}!`, {
-            duration: 3000,
-            style: {
-              background: 'green', // Set your desired background color
-            },
-          });
-    
-          navigate('/');
-        } catch (error) {
-          console.error(error);
-    
-          // Display an error toast with a red background
-          toast.error('Error signing up. Please try again.', {
-            duration: 3000,
-            style: {
-              background: 'red', // Set your desired background color
-            },
-          });
-        } finally {
-          setLoading(false);
-        }
-      };
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        const formData = {
-            name: e.target.elements.name.value,
-            email: e.target.elements.email.value,
-            password: e.target.elements.password.value,
-        };
-        handleSignup(formData);
+      try {
+        setLoading(true);
+        const { data } = await signupMutation.mutateAsync(formData);
+        console.log(data);
+  
+        // Display a success toast with a green background
+        toast.success(`Welcome, ${data.name}!`, {
+          duration: 3000,
+          style: {
+            background: 'green', // Set your desired background color
+          },
+        });
+  
+        navigate('/');
+      } catch (error) {
+        console.error(error);
+  
+        // Display an error toast with a red background
+        toast.error('Error signing up. Please try again.', {
+          duration: 3000,
+          style: {
+            background: 'red', // Set your desired background color
+          },
+        });
+      } finally {
+        setLoading(false);
+      }
     };
-
-
-
+  
+    const handleSubmit = (e) => {
+      e.preventDefault();
+      const formData = {
+        name: e.target.elements.name.value,
+        email: e.target.elements.email.value,
+        password,
+      };
+      handleSignup(formData);
+    };
+  
+    const togglePasswordVisibility = () => {
+      setShowPassword((prevShowPassword) => !prevShowPassword);
+    };
+  
 
     return (
         <>
@@ -90,13 +94,25 @@ const Signup = () => {
                                                     placeholder="Write Your Email.."
                                                     className="border rounded-lg py-3 px-3 bg-black border-indigo-600 placeholder-white-500 text-white mb-3" />
                                                 <label htmlFor="password" className="font-bold text-lg text-white">Password</label>
-                                                <input
+                                                {/* <input
                                                     type="password"
                                                     id="password"
                                                     name="password"
                                                     required
                                                     placeholder="Write Your Password.."
-                                                    className="border rounded-lg py-3 px-3 mt-4 bg-black border-indigo-600 placeholder-white-500 text-white" />
+                                                    className="border rounded-lg py-3 px-3 mt-4 bg-black border-indigo-600 placeholder-white-500 text-white" /> */}
+                                                        <div className="relative">
+                                                <input
+                                                    type={showPassword ? 'text' : 'password'}
+                                                    value={password}
+                                                    onChange={(e) => setPassword(e.target.value)}
+                                                    placeholder="Write Your Password.."
+                                                    className="border rounded-lg py-3 px-3 mt-4 bg-black border-indigo-600 placeholder-white-500 text-white w-full"
+                                                />
+                                                <div className="password-toggle" onClick={togglePasswordVisibility}>
+                                                    {showPassword ? <RiEyeOffFill /> : <RiEyeFill />}
+                                                </div>
+                                            </div>
                                                 <button
                                                     type="submit"
                                                     className="border mt-12 border-indigo-600 bg-black text-white rounded-lg py-3 font-semibold relative"

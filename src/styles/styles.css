@@ -124,3 +124,14 @@ button::before {
   animation: spin 1s linear infinite;
   margin-right: 8px; /* Adjust the margin as needed */
 }
+
+
+.password-toggle {
+  position: absolute;
+  top: 64%;
+  right: 10px; /* Adjust the right distance as needed */
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #fff; /* Set the color of the icon */
+  font-size: 18px; 
+}

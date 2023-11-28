@@ -23,6 +23,7 @@
     "react-query": "^3.39.3",
     "react-router-dom": "^6.20.0",
     "react-spinners": "^0.13.8",
+    "react-typewriter-effect": "^1.1.0",
     "sweetalert2": "^11.10.1"
   },
   "devDependencies": {
