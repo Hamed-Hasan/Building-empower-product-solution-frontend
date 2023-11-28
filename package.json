@@ -24,7 +24,8 @@
     "react-router-dom": "^6.20.0",
     "react-spinners": "^0.13.8",
     "react-typewriter-effect": "^1.1.0",
-    "sweetalert2": "^11.10.1"
+    "sweetalert2": "^11.10.1",
+    "yup": "^1.3.2"
   },
   "devDependencies": {
     "@types/react": "^18.2.37",

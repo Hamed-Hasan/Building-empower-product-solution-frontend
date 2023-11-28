@@ -5,6 +5,7 @@ import { RiEyeFill, RiEyeOffFill } from 'react-icons/ri';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSignupMutation } from '../../services/authQueries';
 import "../../styles/styles.css"
+import { signupSchema } from '../../schema/authSchema';
 
 
 const Signup = () => {
@@ -15,34 +16,45 @@ const Signup = () => {
     const navigate = useNavigate();
   
     const handleSignup = async (formData) => {
-      try {
-        setLoading(true);
-        const { data } = await signupMutation.mutateAsync(formData);
-        console.log(data);
-  
-        // Display a success toast with a green background
-        toast.success(`Welcome, ${data.name}!`, {
-          duration: 3000,
-          style: {
-            background: 'green', // Set your desired background color
-          },
-        });
-  
-        navigate('/');
-      } catch (error) {
-        console.error(error);
-  
-        // Display an error toast with a red background
-        toast.error('Error signing up. Please try again.', {
-          duration: 3000,
-          style: {
-            background: 'red', // Set your desired background color
-          },
-        });
-      } finally {
-        setLoading(false);
-      }
+        try {
+            setLoading(true);
+    
+            // Validate form data
+            await signupSchema.validate(formData, { abortEarly: false });
+    
+            const { data } = await signupMutation.mutateAsync(formData);
+    
+            // Display a success toast with a green background
+            toast.success(`Welcome, ${data.name}!`, {
+                duration: 3000,
+                style: {
+                    background: 'green', // Set your desired background color
+                },
+            });
+    
+            navigate('/');
+        } catch (error) {
+            console.error(error);
+    
+            if (error.name === 'ValidationError') {
+                // Yup validation error
+                error.errors.forEach((errorMsg) => {
+                    toast.error(errorMsg, { duration: 3000 });
+                });
+            } else {
+                // Other errors
+                toast.error('Error signing up. Please try again.', {
+                    duration: 3000,
+                    style: {
+                        background: 'red', // Set your desired background color
+                    },
+                });
+            }
+        } finally {
+            setLoading(false);
+        }
     };
+    
   
     const handleSubmit = (e) => {
       e.preventDefault();
@@ -85,6 +97,10 @@ const Signup = () => {
                                                     required
                                                     placeholder="Write Your Name.."
                                                     className="border rounded-lg py-3 px-3 mt-4 bg-black border-indigo-600 placeholder-white-500 text-white" />
+                                                           <div className="font-bold text-lg text-red-600 mt-1">
+                                                           {signupSchema.errors?.name?.message}
+
+                                                         </div>
                                                 <label htmlFor="email" className="font-bold text-lg text-white mt-3">Email</label>
                                                 <input
                                                     type="email"
@@ -93,14 +109,12 @@ const Signup = () => {
                                                     required
                                                     placeholder="Write Your Email.."
                                                     className="border rounded-lg py-3 px-3 bg-black border-indigo-600 placeholder-white-500 text-white mb-3" />
+                                                    <div className="font-bold text-lg text-red-600 mt-1">
+                                                    {signupSchema.errors?.email?.message}
+
+                                                         </div>
                                                 <label htmlFor="password" className="font-bold text-lg text-white">Password</label>
-                                                {/* <input
-                                                    type="password"
-                                                    id="password"
-                                                    name="password"
-                                                    required
-                                                    placeholder="Write Your Password.."
-                                                    className="border rounded-lg py-3 px-3 mt-4 bg-black border-indigo-600 placeholder-white-500 text-white" /> */}
+                                            
                                                         <div className="relative">
                                                 <input
                                                     type={showPassword ? 'text' : 'password'}
@@ -109,10 +123,15 @@ const Signup = () => {
                                                     placeholder="Write Your Password.."
                                                     className="border rounded-lg py-3 px-3 mt-4 bg-black border-indigo-600 placeholder-white-500 text-white w-full"
                                                 />
+                                                
                                                 <div className="password-toggle" onClick={togglePasswordVisibility}>
                                                     {showPassword ? <RiEyeOffFill /> : <RiEyeFill />}
                                                 </div>
                                             </div>
+                                            <div className="font-bold text-lg text-red-600 mt-1">
+                                            {signupSchema.errors?.password?.message}
+
+                                                         </div>
                                                 <button
                                                     type="submit"
                                                     className="border mt-12 border-indigo-600 bg-black text-white rounded-lg py-3 font-semibold relative"

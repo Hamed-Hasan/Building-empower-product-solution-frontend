@@ -5,6 +5,7 @@ import { RiEyeFill, RiEyeOffFill } from 'react-icons/ri';
 import toast from 'react-hot-toast';
 import "../../styles/styles.css"
 import TypeWriter from '../../shared/TypeWriter/TypeWriter';
+import { loginSchema } from '../../schema/authSchema';
 
 
 const Login = () => {
@@ -17,29 +18,39 @@ const Login = () => {
 
     const handleLogin = async (e) => {
         e.preventDefault();
-
+    
         try {
             setLoading(true);
+    
+            // Validate form data
+            await loginSchema.validate({ email, password }, { abortEarly: false });
+    
             const { data } = await loginMutation.mutateAsync({ email, password });
-
+    
             // Display a success toast
             toast.success(`Welcome back, ${data.user.name}!`, {
-                duration: 3000, // Duration of the toast in milliseconds
+                duration: 3000,
             });
-
+    
             console.log(data);
             navigate('/table');
         } catch (error) {
             console.error(error);
-
-            // Display an error toast
-            toast.error('Invalid credentials. Please try again.', {
-                duration: 3000,
-            });
+    
+            if (error.name === 'ValidationError') {
+                // Yup validation error
+                error.errors.forEach((errorMsg) => {
+                    toast.error(errorMsg, { duration: 3000 });
+                });
+            } else {
+                // Other errors
+                toast.error('Invalid credentials. Please try again.', { duration: 3000 });
+            }
         } finally {
             setLoading(false);
         }
     };
+    
 
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
@@ -80,6 +91,9 @@ const Login = () => {
                                                 onChange={(e) => setEmail(e.target.value)}
                                                 placeholder="Write Your Email.."
                                                 className="border rounded-lg py-3 px-3 bg-black border-indigo-600 placeholder-white-500 text-white mb-3" />
+                                                <div className="font-bold text-lg text-red-600 mt-1">
+                                        {loginSchema?.errors?.email?.message}
+                                    </div>
                                             <label className="font-bold text-lg text-white">Password</label>
                                         
                                             <div className="relative">
