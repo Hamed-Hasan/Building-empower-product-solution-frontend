@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/img-redundant-alt */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React from 'react';
+import { useState,useEffect } from 'react';
 import '../Table/Table.css';
 import { BiShowAlt } from 'react-icons/bi';
 import { MdAddchart } from 'react-icons/md';
@@ -23,10 +24,10 @@ import { toast } from 'react-hot-toast';
 import SearchBar from '../../common/SearchBar';
 import Loading from '../../shared/Loading/Loading';
 import { useGetItemsQuery } from '../../services/authQueries';
-import { useState } from 'react';
-import { useEffect } from 'react';
+
 
 const ItemList = () => {
+  const [sortOrder, setSortOrder] = useState("asc");
   const { data: items, isLoading, isError } = useGetItemsQuery();
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredItems, setFilteredItems] = useState([]);
@@ -55,7 +56,18 @@ const ItemList = () => {
     setItemsToShow(itemsToShow + 5);
   };
 
-
+  const handleSortByDate = () => {
+    const sortedItems = [...filteredItems].sort((a, b) => {
+      const dateA = new Date(a.created_at);
+      const dateB = new Date(b.created_at);
+  
+      return sortOrder === "asc" ? dateA - dateB : dateB - dateA;
+    });
+  
+    setFilteredItems(sortedItems);
+    setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+  };
+  
   const { isOpen: isShowModalOpen, onOpen: onShowModalOpen, onClose: onShowModalClose } = useDisclosure();
   const { isOpen: isAddModalOpen, onOpen: onAddModalOpen, onClose: onAddModalClose } = useDisclosure();
   const { isOpen: isEditModalOpen, onOpen: onEditModalOpen, onClose: onEditModalClose } = useDisclosure();
@@ -117,7 +129,8 @@ const ItemList = () => {
                       <tr>
                         <th className="p-3">Index</th>
                         <th className="p-3 text-left">Name</th>
-                        <th className="p-3 text-left">Date</th>
+                        <th className="p-3 text-left cursor-pointer" onClick={handleSortByDate}>Date {sortOrder === "asc" ? "↑" : "↓"}</th>
+
                         <th className="p-3 text-left">Author</th>
                         <th className="p-3 text-left">Action</th>
                       </tr>

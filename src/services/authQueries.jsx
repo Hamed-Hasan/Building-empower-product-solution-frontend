@@ -36,15 +36,7 @@ export const getItems = async () => {
     return response.data;
   };
   
-  export const useCreateItemMutation = () => {
-    return useMutation(createItem, {
-      onSuccess: () => {
-        // Optionally, refetch the items query after a successful mutation
-        queryClient.refetchQueries('items');
-      },
-    });
-  };
-  
+
   export const getItemById = async (itemId) => {
     const response = await api.get(`/items/${itemId}`);
     return response.data;
@@ -55,13 +47,23 @@ export const getItems = async () => {
       enabled: !!itemId,
     });
   };
+
+
+
+  export const useCreateItemMutation = () => {
+    const queryClient = useQueryClient(); // Initialize queryClient
   
-  export const updateItem = async (itemId, itemData) => {
-    const response = await api.put(`/items/${itemId}`, itemData);
-    return response.data;
+    return useMutation(createItem, {
+      onSuccess: () => {
+        // Optionally, refetch the items query after a successful mutation
+        queryClient.refetchQueries('items');
+      },
+    });
   };
   
   export const useUpdateItemMutation = () => {
+    const queryClient = useQueryClient(); // Initialize queryClient
+  
     return useMutation(updateItem, {
       onSuccess: () => {
         queryClient.refetchQueries('items');
@@ -69,12 +71,9 @@ export const getItems = async () => {
     });
   };
   
-  export const deleteItem = async (itemId) => {
-    const response = await api.delete(`/items/${itemId}`);
-    return response.data;
-  };
-  
   export const useDeleteItemMutation = () => {
+    const queryClient = useQueryClient(); // Initialize queryClient
+  
     return useMutation(deleteItem, {
       onSuccess: () => {
         queryClient.refetchQueries('items');
@@ -83,12 +82,13 @@ export const getItems = async () => {
   };
   
   
-
-
-
-
-
   
+
+
+
+
+
+
   // Fetch all users
 const getAllUsers = async () => {
   const response = await api.get('/users');
@@ -102,7 +102,7 @@ export const useGetAllUsersQuery = () => {
 // Fetch a specific user by ID
 const getUserById = async (userId) => {
   const response = await api.get(`/users/${userId}`);
-  return response.data.data;
+  return response.data;
 };
 
 export const useGetUserByIdQuery = (userId) => {

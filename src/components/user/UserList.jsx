@@ -22,37 +22,55 @@ import Swal from 'sweetalert2';
 import { toast } from 'react-hot-toast';
 import SearchBar from '../../common/SearchBar';
 import Loading from '../../shared/Loading/Loading';
-import { useGetItemsQuery } from '../../services/authQueries';
+import { useGetAllUsersQuery, useGetItemsQuery } from '../../services/authQueries';
 import { useState } from 'react';
 import { useEffect } from 'react';
 
 const UserList = () => {
-  const { data: items, isLoading, isError } = useGetItemsQuery();
+    const [sortOrder, setSortOrder] = useState("asc");
+  const { data: users, isLoading, isError } = useGetAllUsersQuery();
+
+
   const [searchQuery, setSearchQuery] = useState("");
-  const [filteredItems, setFilteredItems] = useState([]);
-  const [itemsToShow, setItemsToShow] = useState(5);
+  const [filteredUsers, setFilteredUsers] = useState([]);
+  const [usersToShow, setItemsToShow] = useState(5);
 
   useEffect(() => {
     // Update filteredItems when items are successfully fetched
-    if (items?.data) {
-      setFilteredItems(items.data);
+    if (users) {
+      setFilteredUsers(users);
     }
-  }, [items]);
+  }, [users]);
 
   const handleSearch = () => {
     const searchTerm = searchQuery.toLowerCase();
-    const filtered = items?.data?.filter(
-      (item) =>
-        item.name.toLowerCase().includes(searchTerm) ||
-        item.created_by.toLowerCase().includes(searchTerm)
+    const filtered = users?.filter(
+      (user) =>
+        user.name.toLowerCase().includes(searchTerm) ||
+        user.email.toLowerCase().includes(searchTerm)
     );
 
-    setFilteredItems(filtered);
+    setFilteredUsers(filtered);
   };
+
+
+  const handleSortByDate = () => {
+    const sortedUsers = [...filteredUsers].sort((a, b) => {
+      const dateA = new Date(a.created_at);
+      const dateB = new Date(b.created_at);
+  
+      return sortOrder === "asc" ? dateA - dateB : dateB - dateA;
+    });
+  
+    setFilteredUsers(sortedUsers);
+    setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+  };
+
+  
 
   const handleShowMore = () => {
     // Increase the number of items to show by 5 on each click
-    setItemsToShow(itemsToShow + 5);
+    setItemsToShow(usersToShow + 5);
   };
 
 
@@ -78,11 +96,11 @@ const UserList = () => {
   const getBackgroundColor = (createdBy) => {
     switch (createdBy) {
       case 'admin':
-        return 'bg-green-400';
+        return 'bg-green-600';
       case 'super admin':
-        return 'bg-yellow-400';
+        return 'bg-yellow-600';
       case 'customer':
-        return 'bg-red-400';
+        return 'bg-red-600';
       default:
         return '';
     }
@@ -93,7 +111,6 @@ const UserList = () => {
   return (
     <div className="flex justify-center">
       <div className="container mx-auto">
-
 
         {/* SearchBar component */}
         <SearchBar
@@ -117,14 +134,15 @@ const UserList = () => {
                       <tr>
                         <th className="p-3">Index</th>
                         <th className="p-3 text-left">Name</th>
-                        <th className="p-3 text-left">Date</th>
+                        <th className="p-3 text-left cursor-pointer" onClick={handleSortByDate}>Date {sortOrder === "asc" ? "↑" : "↓"}</th>
+                        <th className="p-3 text-left">Email</th>
                         <th className="p-3 text-left">Author</th>
                         <th className="p-3 text-left">Action</th>
                       </tr>
                     </thead>
                     <tbody>
-                      {filteredItems.slice(0, itemsToShow)?.map((item, index) => (
-                        <tr key={item._id} className={index % 2 === 0 ? 'bg-gray-800' : ''}>
+                      {filteredUsers.slice(0, usersToShow)?.map((user, index) => (
+                        <tr key={user._id} className={index % 2 === 0 ? 'bg-gray-800' : ''}>
                           <td className="p-3">
                             <div className="flex align-items-center">
                               <div className="ml-3">
@@ -132,10 +150,13 @@ const UserList = () => {
                               </div>
                             </div>
                           </td>
-                          <td className="p-3">{item.name}</td>
-                          <td className="p-3">{new Date(item.created_at).toLocaleDateString()}</td>
-                          <td className="p-3"> <span className={`text-gray-50 rounded-md px-2 ${getBackgroundColor(item.created_by)}`}>
-                            {item.created_by}
+                          <td className="p-3">{user.name}</td>
+                          <td className="p-3">{new Date(user.created_at).toLocaleDateString()}</td>
+                          <td className="p-3"> <span className={`text-gray-50 rounded-md px-2 ${getBackgroundColor(user.created_by)}`}>
+                            {user.email}
+                          </span> </td>
+                          <td className="p-3"> <span className={`text-gray-50 rounded-md px-2 ${getBackgroundColor(user.created_by)}`}>
+                            {user.created_by}
                           </span> </td>
                           <td className="blog-td p-3 flex justify-start gap-5 items-center mt-3">
                             <a href="#" className="text-gray-400 hover:text-gray-100 mr-2" onClick={() => handleShowModal()}>
@@ -159,7 +180,7 @@ const UserList = () => {
                   </table>
 
                   <div className='flex items-center justify-center'>
-                    {filteredItems.length > itemsToShow && (
+                    {filteredUsers.length > usersToShow && (
                       <div className="mt-4">
                         <Button onClick={handleShowMore} style={{ backgroundColor: "#E99400", color: "white" }}>
                           Load More
