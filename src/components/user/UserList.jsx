@@ -43,6 +43,7 @@ const UserList = () => {
         <div className="flex justify-center">
             <div className="container mx-auto">
 
+            
                 {/* SearchBar component */}
                 <SearchBar
                     //   searchQuery={searchQuery}

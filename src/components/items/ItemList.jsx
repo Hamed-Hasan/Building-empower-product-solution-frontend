@@ -23,9 +23,30 @@ import { toast } from 'react-hot-toast';
 import SearchBar from '../../common/SearchBar';
 import Loading from '../../shared/Loading/Loading';
 import { useGetItemsQuery } from '../../services/authQueries';
+import { useState } from 'react';
+import { useEffect } from 'react';
 
 const ItemList = () => {
   const { data: items, isLoading, isError } = useGetItemsQuery();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filteredItems, setFilteredItems] = useState([]);
+  useEffect(() => {
+    // Update filteredItems when items are successfully fetched
+    if (items?.data) {
+      setFilteredItems(items.data);
+    }
+  }, [items]);
+
+  const handleSearch = () => {
+    const searchTerm = searchQuery.toLowerCase();
+    const filtered = items?.data?.filter(
+      (item) =>
+        item.name.toLowerCase().includes(searchTerm) ||
+        item.created_by.toLowerCase().includes(searchTerm)
+    );
+
+    setFilteredItems(filtered);
+  };
 
   const { isOpen: isShowModalOpen, onOpen: onShowModalOpen, onClose: onShowModalClose } = useDisclosure();
   const { isOpen: isAddModalOpen, onOpen: onAddModalOpen, onClose: onAddModalClose } = useDisclosure();
@@ -68,15 +89,16 @@ const ItemList = () => {
 
                 {/* SearchBar component */}
                 <SearchBar
-                    //   searchQuery={searchQuery}
-                    //   setSearchQuery={setSearchQuery}
-                    //   handleSearch={handleSearch}
-                    // loading={loading}
-                />
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+          handleSearch={handleSearch}
+          loading={isLoading}
+        />
 
-                {/* {loading ? (
+
+                {isLoading ? (
           <Loading />
-        ) : ( */}
+        ) : (
                 <>
                     {/* Display table data here */}
                     <div class="flex items-center justify-center  bg-gray-900">
@@ -93,7 +115,7 @@ const ItemList = () => {
     </tr>
   </thead>
   <tbody>
-    {items.data.map((item, index) => (
+    {filteredItems?.map((item, index) => (
       <tr key={item._id} className={index % 2 === 0 ? 'bg-gray-800' : ''}>
         <td className="p-3">
           <div className="flex align-items-center">
@@ -124,6 +146,8 @@ const ItemList = () => {
       </tr>
     ))}
   </tbody>
+
+
 </table>
 
                             </div>
@@ -133,7 +157,7 @@ const ItemList = () => {
                     {/* Pagination component */}
 
                 </>
-                {/* )} for loading */}
+                )}
 
                 {/* Show Modal */}
 
