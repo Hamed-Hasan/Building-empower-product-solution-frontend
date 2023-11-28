@@ -1,4 +1,4 @@
-import { useQuery, useMutation } from 'react-query';
+import { useQuery, useMutation, useQueryClient } from 'react-query';
 import api from '../utils/api';
 
 
@@ -83,3 +83,81 @@ export const getItems = async () => {
   };
   
   
+
+
+
+
+
+  
+  // Fetch all users
+const getAllUsers = async () => {
+  const response = await api.get('/users');
+  return response.data.data;
+};
+
+export const useGetAllUsersQuery = () => {
+  return useQuery('allUsers', getAllUsers);
+};
+
+// Fetch a specific user by ID
+const getUserById = async (userId) => {
+  const response = await api.get(`/users/${userId}`);
+  return response.data.data;
+};
+
+export const useGetUserByIdQuery = (userId) => {
+  return useQuery(['userById', userId], () => getUserById(userId), {
+    enabled: !!userId,
+  });
+};
+
+// Create a new user
+const createUser = async (userData) => {
+  const response = await api.post('/users/create-user', userData);
+  return response.data.data;
+};
+
+export const useCreateUserMutation = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation(createUser, {
+    onSuccess: () => {
+      // Optionally, refetch the allUsers query after a successful mutation
+      queryClient.refetchQueries('allUsers');
+    },
+  });
+};
+
+// Update a user by ID
+const updateUser = async (userId, userData) => {
+  const response = await api.put(`/users/${userId}`, userData);
+  return response.data.data;
+};
+
+export const useUpdateUserMutation = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation(updateUser, {
+    onSuccess: () => {
+      // Optionally, refetch the allUsers query after a successful mutation
+      queryClient.refetchQueries('allUsers');
+    },
+  });
+};
+
+// Delete a user by ID
+const deleteUser = async (userId) => {
+  const response = await api.delete(`/users/${userId}`);
+  return response.data;
+};
+
+export const useDeleteUserMutation = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation(deleteUser, {
+    onSuccess: () => {
+      // Optionally, refetch the allUsers query after a successful mutation
+      queryClient.refetchQueries('allUsers');
+    },
+  });
+};
