@@ -26,14 +26,16 @@ import { useGetAllUsersQuery, useGetItemsQuery } from '../../services/authQuerie
 import { useState } from 'react';
 import { useEffect } from 'react';
 
+const disabledButtonBackgroundColor = "#6B7280"; // Gray color for disabled buttons
+const activeButtonBackgroundColor = "#E99400"; // Default button background color
+
 const UserList = () => {
-    const [sortOrder, setSortOrder] = useState("asc");
-  const { data: users, isLoading, isError } = useGetAllUsersQuery();
-
-
+  const [sortOrder, setSortOrder] = useState("asc");
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredUsers, setFilteredUsers] = useState([]);
-  const [usersToShow, setItemsToShow] = useState(5);
+  const [currentPage, setCurrentPage] = useState(1);
+  const usersPerPage = 5; // Number of users to display per page
+  const { data: users, isLoading, isError } = useGetAllUsersQuery();
 
   useEffect(() => {
     // Update filteredItems when items are successfully fetched
@@ -53,33 +55,21 @@ const UserList = () => {
     setFilteredUsers(filtered);
   };
 
-
   const handleSortByDate = () => {
     const sortedUsers = [...filteredUsers].sort((a, b) => {
       const dateA = new Date(a.created_at);
       const dateB = new Date(b.created_at);
-  
+
       return sortOrder === "asc" ? dateA - dateB : dateB - dateA;
     });
-  
+
     setFilteredUsers(sortedUsers);
     setSortOrder(sortOrder === "asc" ? "desc" : "asc");
   };
 
-  
-
-  const handleShowMore = () => {
-    // Increase the number of items to show by 5 on each click
-    setItemsToShow(usersToShow + 5);
-  };
-
-
   const { isOpen: isShowModalOpen, onOpen: onShowModalOpen, onClose: onShowModalClose } = useDisclosure();
   const { isOpen: isAddModalOpen, onOpen: onAddModalOpen, onClose: onAddModalClose } = useDisclosure();
   const { isOpen: isEditModalOpen, onOpen: onEditModalOpen, onClose: onEditModalClose } = useDisclosure();
-
-  if (isLoading) return <Loading />
-  if (isError) return <p>Error fetching items</p>;
 
   const handleShowModal = () => {
     onShowModalOpen();
@@ -92,6 +82,27 @@ const UserList = () => {
   const handleEditModal = () => {
     onEditModalOpen();
   };
+
+  const indexOfLastUser = currentPage * usersPerPage;
+  const indexOfFirstUser = indexOfLastUser - usersPerPage;
+  const currentUsers = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
+
+
+  
+  const handleNextPage = () => {
+    if (indexOfLastUser >= filteredUsers.length) return;
+    setCurrentPage(currentPage + 1);
+  };
+  const handlePrevPage = () => {
+    if (currentPage === 1) return;
+    setCurrentPage(currentPage - 1);
+  };
+
+  const isNextDisabled = indexOfLastUser >= filteredUsers.length || filteredUsers.length === 0;
+  const isPrevDisabled = currentPage === 1 || currentPage > Math.ceil(filteredUsers.length / usersPerPage);
+  
+  const prevButtonColor = isPrevDisabled ? disabledButtonBackgroundColor : activeButtonBackgroundColor;
+  const nextButtonColor = isNextDisabled
 
   const getBackgroundColor = (createdBy) => {
     switch (createdBy) {
@@ -106,8 +117,6 @@ const UserList = () => {
     }
   };
 
-
-
   return (
     <div className="flex justify-center">
       <div className="container mx-auto">
@@ -120,15 +129,14 @@ const UserList = () => {
           loading={isLoading}
         />
 
-
         {isLoading ? (
           <Loading />
         ) : (
           <>
             {/* Display table data here */}
-            <div class="flex items-center justify-center  bg-gray-900">
-              <div class="col-span-12">
-                <div class="overflow-auto lg:overflow-visible ">
+            <div className="flex items-center justify-center bg-gray-900">
+              <div className="col-span-12">
+                <div className="overflow-auto lg:overflow-visible">
                   <table className="blog-table text-gray-400 border-separate space-y-6 text-sm">
                     <thead className="bg-gray-800 text-gray-500">
                       <tr>
@@ -141,7 +149,7 @@ const UserList = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {filteredUsers.slice(0, usersToShow)?.map((user, index) => (
+                      {currentUsers.map((user, index) => (
                         <tr key={user._id} className={index % 2 === 0 ? 'bg-gray-800' : ''}>
                           <td className="p-3">
                             <div className="flex align-items-center">
@@ -175,33 +183,42 @@ const UserList = () => {
                         </tr>
                       ))}
                     </tbody>
-
-
                   </table>
 
-                  <div className='flex items-center justify-center'>
-                    {filteredUsers.length > usersToShow && (
-                      <div className="mt-4">
-                        <Button onClick={handleShowMore} style={{ backgroundColor: "#E99400", color: "white" }}>
-                          Load More
-                        </Button>
+                  <div className="mt-4 flex items-center justify-center gap-5">
+                  <Button
+      onClick={handlePrevPage}
+      style={{
+        backgroundColor: isPrevDisabled ? disabledButtonBackgroundColor : activeButtonBackgroundColor,
+        color: "white",
+        cursor: isPrevDisabled ? "not-allowed" : "pointer",
+      }}
+      disabled={isPrevDisabled}
+    >
+      Previous
+    </Button>
 
-                      </div>
-                    )}
+    <Button
+      onClick={handleNextPage}
+      style={{
+        backgroundColor: isNextDisabled ? disabledButtonBackgroundColor : activeButtonBackgroundColor,
+        color: "white",
+        cursor: isNextDisabled ? "not-allowed" : "pointer",
+      }}
+      disabled={isNextDisabled}
+    >
+      Next
+    </Button>
                   </div>
-
                 </div>
               </div>
             </div>
-
-            {/* Pagination component */}
-
           </>
         )}
 
-        {/* Show Modal */}
+       {/* Show Modal */}
 
-        <Modal isCentered isOpen={isShowModalOpen} onClose={onShowModalClose} size='xl'>
+       <Modal isCentered isOpen={isShowModalOpen} onClose={onShowModalClose} size='xl'>
           <ModalOverlay
             bg='blackAlpha.300'
             backdropFilter='blur(10px) hue-rotate(90deg)'
