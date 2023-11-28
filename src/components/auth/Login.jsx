@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate  } from 'react-router-dom';
 import { useLoginMutation } from '../../services/authQueries';
 
 
 const Login = () => {
-
+    const navigate = useNavigate();
     const loginMutation = useLoginMutation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -16,6 +16,7 @@ const Login = () => {
     try {
       const { data } = await loginMutation.mutateAsync({ email, password });
       console.log(data); // Handle success, e.g., store tokens in state or context
+      navigate('/table'); 
     } catch (error) {
       console.error(error); // Handle error, e.g., display error message to the user
     }

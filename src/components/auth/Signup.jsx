@@ -51,6 +51,7 @@ const Signup = () => {
                                                 type="text"
                                                 id="name"
                                                 name="name" 
+                                                required
                                                 placeholder="Write Your Name.." 
                                                 className="border rounded-lg py-3 px-3 mt-4 bg-black border-indigo-600 placeholder-white-500 text-white" />
                                                 <label htmlFor="email" className="font-bold text-lg text-white mt-3">Email</label>
@@ -58,6 +59,7 @@ const Signup = () => {
                                                type="email"
                                                id="email"
                                                name="email"
+                                               required
                                                 placeholder="Write Your Email.." 
                                                 className="border rounded-lg py-3 px-3 bg-black border-indigo-600 placeholder-white-500 text-white mb-3" />
                                                 <label htmlFor="password" className="font-bold text-lg text-white">Password</label>
@@ -65,6 +67,7 @@ const Signup = () => {
                                                type="password"
                                                id="password"
                                                name="password"
+                                               required
                                                 placeholder="Write Your Password.." 
                                                 className="border rounded-lg py-3 px-3 mt-4 bg-black border-indigo-600 placeholder-white-500 text-white" />
                                                 <button 

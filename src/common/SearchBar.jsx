@@ -1,9 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 const SearchBar = ({ searchQuery, setSearchQuery, handleSearch, loading }) => {
+  const [buttonText, setButtonText] = useState('Search');
+
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    // Change the button text to "Searching..."
+    setButtonText('Searching...');
+
+    // Perform the search
     handleSearch();
+
+    // After the search is complete, change the button text back to "Search"
+    setTimeout(() => {
+      setButtonText('Search');
+    }, 300); // Simulate delay for search operation
   };
 
   return (
@@ -22,15 +34,15 @@ const SearchBar = ({ searchQuery, setSearchQuery, handleSearch, loading }) => {
           id="default-search"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          placeholder="Search Your Favorite Blog..."
+          placeholder="Search Your Favorite Content..."
           className="block p-4 pl-10 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-warning dark:focus:border-primary"
         />
         <button
           type="submit"
           disabled={loading}
-          className="text-white absolute right-2.5 bottom-2.5 bg-primary hover:bg-warning focus:ring-4 focus:outline-none focus:ring-warning font-medium rounded-lg text-sm px-4 py-2 serach-btn dark:focus:ring-primary"
+          className="text-white search-btn absolute right-2.5 bottom-2.5 bg-primary hover:bg-warning focus:outline-none font-medium rounded-lg text-sm px-4 py-2 search-btn dark:focus:ring-primary"
         >
-          {loading ? 'Searching...' : 'Search'}
+          {buttonText}
         </button>
       </div>
     </form>

@@ -90,11 +90,11 @@ const ItemList = () => {
   const getBackgroundColor = (createdBy) => {
     switch (createdBy) {
       case 'admin':
-        return 'bg-green-400';
+        return 'bg-green-600';
       case 'super admin':
-        return 'bg-yellow-400';
+        return 'bg-yellow-600';
       case 'customer':
-        return 'bg-red-400';
+        return 'bg-red-600';
       default:
         return '';
     }
@@ -103,7 +103,8 @@ const ItemList = () => {
 
 
   return (
-    <div className="flex justify-center">
+  <section className='h-screen'>
+  <div className="flex justify-center">
       <div className="container mx-auto">
 
 
@@ -123,7 +124,7 @@ const ItemList = () => {
             {/* Display table data here */}
             <div class="flex items-center justify-center  bg-gray-900">
               <div class="col-span-12">
-                <div class="overflow-auto lg:overflow-visible ">
+                <div class="overflow-x-auto ">
                   <table className="blog-table text-gray-400 border-separate space-y-6 text-sm">
                     <thead className="bg-gray-800 text-gray-500">
                       <tr>
@@ -278,6 +279,7 @@ const ItemList = () => {
 
       </div>
     </div>
+  </section>
   );
 };
 

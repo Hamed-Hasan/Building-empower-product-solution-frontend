@@ -118,7 +118,8 @@ const UserList = () => {
   };
 
   return (
-    <div className="flex justify-center">
+    <section className='h-screen'>
+      <div className="flex justify-center">
       <div className="container mx-auto">
 
         {/* SearchBar component */}
@@ -303,6 +304,7 @@ const UserList = () => {
 
       </div>
     </div>
+    </section>
   );
 };
 
