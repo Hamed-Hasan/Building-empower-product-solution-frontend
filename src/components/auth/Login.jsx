@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useLoginMutation } from '../../services/authQueries';
+import toast from 'react-hot-toast';
 import "../../styles/styles.css"
+
 
 const Login = () => {
     const [loading, setLoading] = useState(false);
@@ -14,16 +16,28 @@ const Login = () => {
         e.preventDefault();
       
         try {
-          setLoading(true); // Set loading to true when starting the login process
+          setLoading(true);
           const { data } = await loginMutation.mutateAsync({ email, password });
+      
+          // Display a success toast
+          toast.success(`Welcome back, ${data.user.name}!`, {
+            duration: 3000, // Duration of the toast in milliseconds
+          });
+      
           console.log(data);
           navigate('/table');
         } catch (error) {
           console.error(error);
+      
+          // Display an error toast
+          toast.error('Invalid credentials. Please try again.', {
+            duration: 3000,
+          });
         } finally {
-          setLoading(false); // Set loading back to false when the login process is complete
+          setLoading(false);
         }
       };
+      
       
 
     return (

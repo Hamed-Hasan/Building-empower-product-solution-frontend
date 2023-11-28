@@ -1,28 +1,55 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import toast from 'react-hot-toast';
+import { Link, useNavigate } from 'react-router-dom';
 import { useSignupMutation } from '../../services/authQueries';
+import "../../styles/styles.css"
+
 
 const Signup = () => {
-
+    const [loading, setLoading] = useState(false);
     const signupMutation = useSignupMutation();
+    const navigate = useNavigate();
+
 
     const handleSignup = async (formData) => {
-      try {
-        const { data } = await signupMutation.mutateAsync(formData);
-        console.log(data); // Handle success, e.g., redirect to dashboard
-      } catch (error) {
-        console.error(error); // Handle error, e.g., show error message
-      }
-    };
-  
-    const handleSubmit = (e) => {
-      e.preventDefault();
-      const formData = {
-        name: e.target.elements.name.value,
-        email: e.target.elements.email.value,
-        password: e.target.elements.password.value,
+        try {
+          setLoading(true);
+          const { data } = await signupMutation.mutateAsync(formData);
+          console.log(data);
+    
+          // Display a success toast with a green background
+          toast.success(`Welcome, ${data.name}!`, {
+            duration: 3000,
+            style: {
+              background: 'green', // Set your desired background color
+            },
+          });
+    
+          navigate('/');
+        } catch (error) {
+          console.error(error);
+    
+          // Display an error toast with a red background
+          toast.error('Error signing up. Please try again.', {
+            duration: 3000,
+            style: {
+              background: 'red', // Set your desired background color
+            },
+          });
+        } finally {
+          setLoading(false);
+        }
       };
-      handleSignup(formData);
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        const formData = {
+            name: e.target.elements.name.value,
+            email: e.target.elements.email.value,
+            password: e.target.elements.password.value,
+        };
+        handleSignup(formData);
     };
 
 
@@ -47,35 +74,42 @@ const Signup = () => {
                                         <div className="bg-black flex flex-col w-full border border-gray-900 rounded-lg px-8 py-10">
                                             <form onSubmit={handleSubmit} className="flex flex-col  ">
                                                 <label htmlFor="name" className="font-bold text-lg text-white">Name</label>
-                                                <input 
-                                                type="text"
-                                                id="name"
-                                                name="name" 
-                                                required
-                                                placeholder="Write Your Name.." 
-                                                className="border rounded-lg py-3 px-3 mt-4 bg-black border-indigo-600 placeholder-white-500 text-white" />
+                                                <input
+                                                    type="text"
+                                                    id="name"
+                                                    name="name"
+                                                    required
+                                                    placeholder="Write Your Name.."
+                                                    className="border rounded-lg py-3 px-3 mt-4 bg-black border-indigo-600 placeholder-white-500 text-white" />
                                                 <label htmlFor="email" className="font-bold text-lg text-white mt-3">Email</label>
-                                                <input 
-                                               type="email"
-                                               id="email"
-                                               name="email"
-                                               required
-                                                placeholder="Write Your Email.." 
-                                                className="border rounded-lg py-3 px-3 bg-black border-indigo-600 placeholder-white-500 text-white mb-3" />
+                                                <input
+                                                    type="email"
+                                                    id="email"
+                                                    name="email"
+                                                    required
+                                                    placeholder="Write Your Email.."
+                                                    className="border rounded-lg py-3 px-3 bg-black border-indigo-600 placeholder-white-500 text-white mb-3" />
                                                 <label htmlFor="password" className="font-bold text-lg text-white">Password</label>
-                                                <input 
-                                               type="password"
-                                               id="password"
-                                               name="password"
-                                               required
-                                                placeholder="Write Your Password.." 
-                                                className="border rounded-lg py-3 px-3 mt-4 bg-black border-indigo-600 placeholder-white-500 text-white" />
-                                                <button 
-                                                 type="submit"
-                                                className="border mt-12 border-indigo-600 bg-black text-white rounded-lg py-3 font-semibold"
-                                                disabled={signupMutation.isLoading}
+                                                <input
+                                                    type="password"
+                                                    id="password"
+                                                    name="password"
+                                                    required
+                                                    placeholder="Write Your Password.."
+                                                    className="border rounded-lg py-3 px-3 mt-4 bg-black border-indigo-600 placeholder-white-500 text-white" />
+                                                <button
+                                                    type="submit"
+                                                    className="border mt-12 border-indigo-600 bg-black text-white rounded-lg py-3 font-semibold relative"
+                                                    disabled={signupMutation.isLoading}
                                                 >
-                                                    {signupMutation.isLoading ? 'Signing up...' : 'Sign Up'}
+                                                    <div className='flex items-center justify-center'>
+                                                        <div>
+                                                            {loading && <div className="spinner"></div>}
+                                                        </div>
+                                                        <div>
+                                                            {signupMutation.isLoading ? 'Signing up...' : 'Sign Up'}
+                                                        </div>
+                                                    </div>
                                                 </button>
                                                 <div class="flex items-center justify-between mt-4"><span class="w-1/5 border-b dark:border-gray-600 md:w-1/4"></span> <Link to="/" class="text-xs  text-gray-500 uppercase dark:text-gray-400 hover:underline">DO YOU HAVE AN ACCOUNT?</Link> <span class="w-1/5 border-b dark:border-gray-600 md:w-1/4"></span></div>
                                             </form>
