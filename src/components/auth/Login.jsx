@@ -18,25 +18,25 @@ const Login = () => {
 
     const handleLogin = async (e) => {
         e.preventDefault();
-    
+
         try {
             setLoading(true);
-    
+
             // Validate form data
             await loginSchema.validate({ email, password }, { abortEarly: false });
-    
+
             const { data } = await loginMutation.mutateAsync({ email, password });
-    
+
             // Display a success toast
             toast.success(`Welcome back, ${data.user.name}!`, {
                 duration: 3000,
             });
-    
+
             console.log(data);
             navigate('/table');
         } catch (error) {
             console.error(error);
-    
+
             if (error.name === 'ValidationError') {
                 // Yup validation error
                 error.errors.forEach((errorMsg) => {
@@ -50,7 +50,7 @@ const Login = () => {
             setLoading(false);
         }
     };
-    
+
 
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
@@ -64,15 +64,15 @@ const Login = () => {
                         <div className="absolute bg-black opacity-25 inset-0 z-0"></div>
                         <div className="w-full lg:max-w-2xl md:max-w-md z-10 items-center text-center">
                             <div className="font-bold leading-tight mb-6 mx-auto w-full content-center items-center">
-                            
+
                                 <div className="flex items-center">
-                                <span className="text-6xl text-primary text-[#FFA001]">-</span>
-                               <div className='pb-6'>
-                               <TypeWriter />
-                               </div>
-                            </div>
+                                    <span className="text-6xl text-primary text-[#FFA001]">-</span>
+                                    <div className='pb-6'>
+                                        <TypeWriter />
+                                    </div>
+                                </div>
                                 <p className='font-normal text-left opacity-80'>
-                                Embark on a coding odyssey with Arraytics! Conquer our JavaScript take-home exam by crafting an elegant MERN Shopping App. Securely separate frontend and backend, authenticate through APIs, showcase data with flair, and dockerize for seamless deployment. Keep it simple, impress at Arraytics!
+                                    Embark on a coding odyssey with Arraytics! Conquer our JavaScript take-home exam by crafting an elegant MERN Shopping App. Securely separate frontend and backend, authenticate through APIs, showcase data with flair, and dockerize for seamless deployment. Keep it simple, impress at Arraytics!
                                 </p>
                             </div>
                         </div>
@@ -91,11 +91,11 @@ const Login = () => {
                                                 onChange={(e) => setEmail(e.target.value)}
                                                 placeholder="Write Your Email.."
                                                 className="border rounded-lg py-3 px-3 bg-black border-indigo-600 placeholder-white-500 text-white mb-3" />
-                                                <div className="font-bold text-lg text-red-600 mt-1">
-                                        {loginSchema?.errors?.email?.message}
-                                    </div>
+                                            <div className="font-bold text-lg text-red-600 mt-1">
+                                                {loginSchema?.errors?.email?.message}
+                                            </div>
                                             <label className="font-bold text-lg text-white">Password</label>
-                                        
+
                                             <div className="relative">
                                                 <input
                                                     type={showPassword ? 'text' : 'password'}
@@ -108,7 +108,9 @@ const Login = () => {
                                                     {showPassword ? <RiEyeOffFill /> : <RiEyeFill />}
                                                 </div>
                                             </div>
-
+                                            <div className="font-bold text-lg text-red-600 mt-1">
+                                                {loginSchema.errors?.password?.message}
+                                            </div>
                                             <button
                                                 type="submit"
                                                 className="border mt-12 border-indigo-600 bg-black text-white rounded-lg py-3 font-semibold relative"

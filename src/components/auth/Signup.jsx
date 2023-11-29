@@ -14,16 +14,16 @@ const Signup = () => {
     const signupMutation = useSignupMutation();
     const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate();
-  
+
     const handleSignup = async (formData) => {
         try {
             setLoading(true);
-    
+
             // Validate form data
             await signupSchema.validate(formData, { abortEarly: false });
-    
+
             const { data } = await signupMutation.mutateAsync(formData);
-    
+
             // Display a success toast with a green background
             toast.success(`Welcome, ${data.name}!`, {
                 duration: 3000,
@@ -31,11 +31,11 @@ const Signup = () => {
                     background: 'green', // Set your desired background color
                 },
             });
-    
+
             navigate('/');
         } catch (error) {
             console.error(error);
-    
+
             if (error.name === 'ValidationError') {
                 // Yup validation error
                 error.errors.forEach((errorMsg) => {
@@ -54,22 +54,22 @@ const Signup = () => {
             setLoading(false);
         }
     };
-    
-  
+
+
     const handleSubmit = (e) => {
-      e.preventDefault();
-      const formData = {
-        name: e.target.elements.name.value,
-        email: e.target.elements.email.value,
-        password,
-      };
-      handleSignup(formData);
+        e.preventDefault();
+        const formData = {
+            name: e.target.elements.name.value,
+            email: e.target.elements.email.value,
+            password,
+        };
+        handleSignup(formData);
     };
-  
+
     const togglePasswordVisibility = () => {
-      setShowPassword((prevShowPassword) => !prevShowPassword);
+        setShowPassword((prevShowPassword) => !prevShowPassword);
     };
-  
+
 
     return (
         <>
@@ -97,10 +97,10 @@ const Signup = () => {
                                                     required
                                                     placeholder="Write Your Name.."
                                                     className="border rounded-lg py-3 px-3 mt-4 bg-black border-indigo-600 placeholder-white-500 text-white" />
-                                                           <div className="font-bold text-lg text-red-600 mt-1">
-                                                           {signupSchema.errors?.name?.message}
+                                                <div className="font-bold text-lg text-red-600 mt-1">
+                                                    {signupSchema.errors?.name?.message}
 
-                                                         </div>
+                                                </div>
                                                 <label htmlFor="email" className="font-bold text-lg text-white mt-3">Email</label>
                                                 <input
                                                     type="email"
@@ -109,29 +109,29 @@ const Signup = () => {
                                                     required
                                                     placeholder="Write Your Email.."
                                                     className="border rounded-lg py-3 px-3 bg-black border-indigo-600 placeholder-white-500 text-white mb-3" />
-                                                    <div className="font-bold text-lg text-red-600 mt-1">
+                                                <div className="font-bold text-lg text-red-600 mt-1">
                                                     {signupSchema.errors?.email?.message}
 
-                                                         </div>
-                                                <label htmlFor="password" className="font-bold text-lg text-white">Password</label>
-                                            
-                                                        <div className="relative">
-                                                <input
-                                                    type={showPassword ? 'text' : 'password'}
-                                                    value={password}
-                                                    onChange={(e) => setPassword(e.target.value)}
-                                                    placeholder="Write Your Password.."
-                                                    className="border rounded-lg py-3 px-3 mt-4 bg-black border-indigo-600 placeholder-white-500 text-white w-full"
-                                                />
-                                                
-                                                <div className="password-toggle" onClick={togglePasswordVisibility}>
-                                                    {showPassword ? <RiEyeOffFill /> : <RiEyeFill />}
                                                 </div>
-                                            </div>
-                                            <div className="font-bold text-lg text-red-600 mt-1">
-                                            {signupSchema.errors?.password?.message}
+                                                <label htmlFor="password" className="font-bold text-lg text-white">Password</label>
 
-                                                         </div>
+                                                <div className="relative">
+                                                    <input
+                                                        type={showPassword ? 'text' : 'password'}
+                                                        value={password}
+                                                        onChange={(e) => setPassword(e.target.value)}
+                                                        placeholder="Write Your Password.."
+                                                        className="border rounded-lg py-3 px-3 mt-4 bg-black border-indigo-600 placeholder-white-500 text-white w-full"
+                                                    />
+
+                                                    <div className="password-toggle" onClick={togglePasswordVisibility}>
+                                                        {showPassword ? <RiEyeOffFill /> : <RiEyeFill />}
+                                                    </div>
+                                                </div>
+                                                <div className="font-bold text-lg text-red-600 mt-1">
+                                                    {signupSchema.errors?.password?.message}
+
+                                                </div>
                                                 <button
                                                     type="submit"
                                                     className="border mt-12 border-indigo-600 bg-black text-white rounded-lg py-3 font-semibold relative"

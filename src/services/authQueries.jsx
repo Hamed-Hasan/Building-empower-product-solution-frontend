@@ -99,17 +99,29 @@ export const useGetAllUsersQuery = () => {
   return useQuery('allUsers', getAllUsers);
 };
 
-// Fetch a specific user by ID
-const getUserById = async (userId) => {
-  const response = await api.get(`/users/${userId}`);
-  return response.data;
+// // Fetch a specific user by ID
+// const getUserById = async (userId) => {
+//   const response = await api.get(`/users/${userId}`);
+//   return response.data;
+// };
+
+// export const useGetUserByIdQuery = (userId) => {
+//   return useQuery(['userById', userId], () => getUserById(userId), {
+//     enabled: !!userId,
+//   });
+// };
+
+export const getUserById = async (userId) => {
+  try {
+    const response = await api.get(`/users/${userId}`);
+    console.log('response:', response);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching user data:', error);
+    return null;
+  }
 };
 
-export const useGetUserByIdQuery = (userId) => {
-  return useQuery(['userById', userId], () => getUserById(userId), {
-    enabled: !!userId,
-  });
-};
 
 // Create a new user
 const createUser = async (userData) => {

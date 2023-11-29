@@ -13,7 +13,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   <QueryClientProvider client={queryClient}>
   <React.StrictMode>
   <ChakraProvider>
-    <App />
+      <App />
     <Toaster
       position="top-center"
       toastOptions={{

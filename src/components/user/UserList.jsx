@@ -22,7 +22,7 @@ import Swal from 'sweetalert2';
 import { toast } from 'react-hot-toast';
 import SearchBar from '../../common/SearchBar';
 import Loading from '../../shared/Loading/Loading';
-import { useGetAllUsersQuery, useGetItemsQuery } from '../../services/authQueries';
+import { getUserById, useGetAllUsersQuery, useGetItemsQuery } from '../../services/authQueries';
 import { useState } from 'react';
 import { useEffect } from 'react';
 
@@ -36,6 +36,7 @@ const UserList = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const usersPerPage = 5; // Number of users to display per page
   const { data: users, isLoading, isError } = useGetAllUsersQuery();
+  getUserById()
 
   useEffect(() => {
     // Update filteredItems when items are successfully fetched
@@ -255,12 +256,6 @@ const UserList = () => {
                 </div>
 
                 <div class="px-4 lg:px-0 mt-12 text-gray-400 max-w-screen-md mx-auto text-lg leading-relaxed">
-
-
-
-
-
-
                 </div>
               </main>
             </>
