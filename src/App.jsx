@@ -1,22 +1,18 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Login from './components/auth/Login';
-import Signup from './components/auth/Signup';
-import Table from './components/Table/Table';
+import { RouterProvider } from 'react-router-dom';
+import router from './routes/routes';
+
+// ...
 
 
 
 
-function App() {
-  return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/table" element={<Table />} />
-      </Routes>
-    </Router>
-  );
-}
+
+const App = () => (
+  <RouterProvider router={router}>
+    <App />
+  </RouterProvider>
+);
+
 
 export default App;
