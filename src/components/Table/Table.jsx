@@ -1,29 +1,18 @@
-import React from 'react';
-import { Tabs, TabList, TabPanels, TabPanel, useTab, useMultiStyleConfig, Box, Button, Tab } from '@chakra-ui/react';
+import React, { useState } from 'react';
+import { Box, Button } from '@chakra-ui/react';
 import { FcDownLeft, FcDownRight } from 'react-icons/fc';
-import { useNavigate } from 'react-router-dom'; // Step 1
-
+import { useNavigate } from 'react-router-dom';
 import '../../styles/styles.css';
 import UserList from '../user/UserList';
 import ItemList from '../items/ItemList';
 
 const Table = () => {
-  const navigate = useNavigate(); // Step 2
+  const navigate = useNavigate();
+  const [selectedTab, setSelectedTab] = useState('user');
 
-  const CustomTab = React.forwardRef((props, ref) => {
-    const tabProps = useTab({ ...props, ref });
-    const isSelected = !!tabProps['aria-selected'];
-    const styles = useMultiStyleConfig('Tabs', tabProps);
-
-    return (
-      <Button __css={styles.tab} {...tabProps}>
-        <Box as='span' mr='2'>
-          {isSelected ? <FcDownRight /> : <FcDownLeft />}
-        </Box>
-        {tabProps.children}
-      </Button>
-    );
-  });
+  const handleTabChange = (tab) => {
+    setSelectedTab(tab);
+  };
 
   const handleLogout = () => {
     navigate('/');
@@ -33,38 +22,51 @@ const Table = () => {
     <div className='table-bg py-14'>
       <div className='flex items-center justify-center my-6'>
         <button onClick={handleLogout} style={{ content: 'Hover me!' }}>
-          <div class='left'></div>
+          <div className='left'></div>
           <h1 className='font-bold text-white px-5 py-3'>Logout</h1>
-          <div class='right'></div>
+          <div className='right'></div>
         </button>
       </div>
-      <Tabs>
-        <TabList justifyContent='center' gap='5'>
-          <Tab
-            color='white'
-            fontWeight='700'
-            _selected={{ color: 'white', bg: '#E99400', rounded: 'full' }}
-          >
-            User List
-          </Tab>
-          <Tab
-            color='white'
-            fontWeight='700'
-            _selected={{ color: 'white', bg: '#E99400', rounded: 'full' }}
-          >
-            Item List
-          </Tab>
-        </TabList>
-        <TabPanels>
-          <TabPanel>
-            <UserList />
-          </TabPanel>
-          <TabPanel>
-            <ItemList />
-          </TabPanel>
-        </TabPanels>
-      </Tabs>
+      <div style={{ display: 'flex', justifyContent: 'center', gap: '5' }}>
+        <CustomTab
+          tabId='user'
+          isSelected={selectedTab === 'user'}
+          onClick={() => handleTabChange('user')}
+        >
+          User List
+        </CustomTab>
+        <CustomTab
+          tabId='item'
+          isSelected={selectedTab === 'item'}
+          onClick={() => handleTabChange('item')}
+        >
+          Item List
+        </CustomTab>
+      </div>
+      <div>
+        {selectedTab === 'user' && <UserList />}
+        {selectedTab === 'item' && <ItemList />}
+      </div>
     </div>
+  );
+};
+
+const CustomTab = ({ tabId, isSelected, onClick, children }) => {
+  return (
+    <Button
+      onClick={onClick}
+      bg={isSelected ? '#E99400' : 'transparent'}
+      color={isSelected ? 'white' : 'black'}
+      fontWeight='700'
+      rounded='full'
+      p={2}
+      _hover={{ bg: isSelected ? '#E99400' : 'gray.200' }}
+    >
+      <Box as='span' mr='2'>
+        {isSelected ? <FcDownRight /> : <FcDownLeft />}
+      </Box>
+      {children}
+    </Button>
   );
 };
 
