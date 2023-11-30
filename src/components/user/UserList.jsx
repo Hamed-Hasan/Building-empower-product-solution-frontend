@@ -22,9 +22,10 @@ import Swal from 'sweetalert2';
 import { toast } from 'react-hot-toast';
 import SearchBar from '../../common/SearchBar';
 import Loading from '../../shared/Loading/Loading';
-import { getUserById, useGetAllUsersQuery, useGetItemsQuery } from '../../services/authQueries';
+import {  useGetAllUsersQuery, useGetItemsQuery } from '../../services/authQueries';
 import { useState } from 'react';
 import { useEffect } from 'react';
+import SingleUser from './SingleUser';
 
 const disabledButtonBackgroundColor = "#6B7280"; // Gray color for disabled buttons
 const activeButtonBackgroundColor = "#E99400"; // Default button background color
@@ -34,9 +35,11 @@ const UserList = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedUser, setSelectedUser] = useState(null);
+
   const usersPerPage = 5; // Number of users to display per page
   const { data: users, isLoading, isError } = useGetAllUsersQuery();
-  getUserById()
+// console.log(users)
 
   useEffect(() => {
     // Update filteredItems when items are successfully fetched
@@ -72,7 +75,8 @@ const UserList = () => {
   const { isOpen: isAddModalOpen, onOpen: onAddModalOpen, onClose: onAddModalClose } = useDisclosure();
   const { isOpen: isEditModalOpen, onOpen: onEditModalOpen, onClose: onEditModalClose } = useDisclosure();
 
-  const handleShowModal = () => {
+  const handleShowModal = (user) => {
+    setSelectedUser(user);
     onShowModalOpen();
   };
 
@@ -122,7 +126,9 @@ const UserList = () => {
     <section className='h-screen'>
       <div className="flex justify-center">
       <div className="container mx-auto">
+      <div>
 
+    </div>
         {/* SearchBar component */}
         <SearchBar
           searchQuery={searchQuery}
@@ -169,9 +175,10 @@ const UserList = () => {
                             {user.created_by}
                           </span> </td>
                           <td className="blog-td p-3 flex justify-start gap-5 items-center mt-3">
-                            <a href="#" className="text-gray-400 hover:text-gray-100 mr-2" onClick={() => handleShowModal()}>
-                              <BiShowAlt size={18} />
-                            </a>
+                          <a href="#" className="text-gray-400 hover:text-gray-100 mr-2" onClick={() => handleShowModal(user)}>
+                            <BiShowAlt size={18} />
+                          </a>
+
                             <a href="#" className="text-gray-400 hover:text-gray-100 ml-2" onClick={() => handleAddModal()}>
                               <MdAddchart />
                             </a>
@@ -221,47 +228,48 @@ const UserList = () => {
        {/* Show Modal */}
 
        <Modal isCentered isOpen={isShowModalOpen} onClose={onShowModalClose} size='xl'>
-          <ModalOverlay
-            bg='blackAlpha.300'
-            backdropFilter='blur(10px) hue-rotate(90deg)'
-          />
-          <ModalContent>
+  <ModalOverlay
+    bg='blackAlpha.300'
+    backdropFilter='blur(10px) hue-rotate(90deg)'
+  />
+  <ModalContent>
+    <ModalCloseButton />
 
-            <>
+    <main className="mt-10">
+      {/* Check if a user is selected before rendering the modal content */}
+      {selectedUser && (
+        <div className="mb-4 md:mb-0 w-full max-w-screen-md mx-auto relative" style={{ height: '24em' }}>
+          <div className="absolute left-0 bottom-0 w-full h-full z-10"
+            style={{
+              backgroundImage: 'linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.7))',
+            }}
+          ></div>
+          <div className="p-4 absolute bottom-0 left-0 z-20">
+            <a
+              href="#"
+              className="px-4 py-1 bg-black text-gray-200 inline-flex items-center justify-center mb-2"
+            >
+              badges
+            </a>
+            <h2 className="text-4xl font-semibold text-gray-100 leading-tight">{selectedUser.name}</h2>
+            <div className="flex mt-3">
+              <div>
+                <p className="font-semibold text-gray-200 text-sm">Author </p>
+                <p className="font-semibold text-gray-400 text-xs">Published </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
-              <ModalCloseButton />
+      {/* Additional content for the modal if needed */}
+      <div className="px-4 lg:px-0 mt-12 text-gray-400 max-w-screen-md mx-auto text-lg leading-relaxed">
+        {/* Display additional user information if needed */}
+      </div>
+    </main>
+  </ModalContent>
+</Modal>
 
-              <main class="mt-10">
-
-                <div class="mb-4 md:mb-0 w-full max-w-screen-md mx-auto relative" style={{ height: '24em' }}>
-                  <div class="absolute left-0 bottom-0 w-full h-full z-10"
-                    style={{
-                      backgroundImage: 'linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.7))',
-                    }}></div>
-                  {/* <img src={selectedBlog.image} /> */}
-                  <div class="p-4 absolute bottom-0 left-0 z-20">
-                    <a href="#"
-                      class="px-4 py-1 bg-black text-gray-200 inline-flex items-center justify-center mb-2">badges</a>
-                    <h2 class="text-4xl font-semibold text-gray-100 leading-tight">
-                      title
-                    </h2>
-                    <div class="flex mt-3">
-                      <div>
-                        <p class="font-semibold text-gray-200 text-sm">Author </p>
-                        <p class="font-semibold text-gray-400 text-xs">Published </p>
-
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="px-4 lg:px-0 mt-12 text-gray-400 max-w-screen-md mx-auto text-lg leading-relaxed">
-                </div>
-              </main>
-            </>
-
-          </ModalContent>
-        </Modal>
 
 
         {/* Add Modal */}
