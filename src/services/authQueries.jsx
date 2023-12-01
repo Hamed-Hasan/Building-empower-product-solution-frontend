@@ -131,6 +131,14 @@ export const updateUser = async (userId, updatedUserData) => {
   }
 };
 
+export const deleteUser = async (userId) => {
+  try {
+    const response = await api.delete(`/users/${userId}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
 
 // Create a new user
 const createUser = async (userData) => {
@@ -167,18 +175,18 @@ export const useCreateUserMutation = () => {
 // };
 
 // Delete a user by ID
-const deleteUser = async (userId) => {
-  const response = await api.delete(`/users/${userId}`);
-  return response.data;
-};
+// const deleteUser = async (userId) => {
+//   const response = await api.delete(`/users/${userId}`);
+//   return response.data;
+// };
 
-export const useDeleteUserMutation = () => {
-  const queryClient = useQueryClient();
+// export const useDeleteUserMutation = () => {
+//   const queryClient = useQueryClient();
 
-  return useMutation(deleteUser, {
-    onSuccess: () => {
-      // Optionally, refetch the allUsers query after a successful mutation
-      queryClient.refetchQueries('allUsers');
-    },
-  });
-};
+//   return useMutation(deleteUser, {
+//     onSuccess: () => {
+//       // Optionally, refetch the allUsers query after a successful mutation
+//       queryClient.refetchQueries('allUsers');
+//     },
+//   });
+// };

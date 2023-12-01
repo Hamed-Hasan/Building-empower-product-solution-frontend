@@ -1,12 +1,18 @@
 /* eslint-disable jsx-a11y/img-redundant-alt */
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React from 'react';
+import React, { useRef } from 'react';
 import '../Table/Table.css';
 import { BiShowAlt } from 'react-icons/bi';
 import { MdAddchart } from 'react-icons/md';
 import { FiEdit3 } from 'react-icons/fi';
 import { RiDeleteBin6Line } from 'react-icons/ri';
 import {
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogOverlay,
   Button,
   Modal,
   ModalBody,
@@ -22,7 +28,7 @@ import Swal from 'sweetalert2';
 import { toast } from 'react-hot-toast';
 import SearchBar from '../../common/SearchBar';
 import Loading from '../../shared/Loading/Loading';
-import {  updateUser, useGetAllUsersQuery, useGetItemsQuery } from '../../services/authQueries';
+import {  deleteUser, updateUser, useGetAllUsersQuery, useGetItemsQuery } from '../../services/authQueries';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import api from '../../utils/api';
@@ -38,6 +44,10 @@ const UserList = () => {
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedUser, setSelectedUser] = useState(null);
+  const [isDeleteDialogOpen, setDeleteDialogOpen] = useState(false);
+const [userToDelete, setUserToDelete] = useState(null);
+const cancelRef = useRef();
+
 
   const usersPerPage = 5; // Number of users to display per page
   const { data: users, isLoading, isError } = useGetAllUsersQuery();
@@ -101,6 +111,25 @@ const UserList = () => {
     }
   };
   
+
+  const handleDeleteUser = async () => {
+    try {
+      const response = await deleteUser(userToDelete._id);
+
+      if (response.status === 'success') {
+        setFilteredUsers((prevUsers) => prevUsers.filter((user) => user._id !== userToDelete._id));
+        setDeleteDialogOpen(false);
+        toast.success('User deleted successfully');
+      } else {
+        toast.error('Failed to delete user');
+      }
+    } catch (error) {
+      console.error('Error deleting user:', error);
+      toast.error('Internal Server Error');
+    }
+  };
+
+  
   
   const { isOpen: isShowModalOpen, onOpen: onShowModalOpen, onClose: onShowModalClose } = useDisclosure();
   const { isOpen: isAddModalOpen, onOpen: onAddModalOpen, onClose: onAddModalClose } = useDisclosure();
@@ -119,6 +148,12 @@ const UserList = () => {
     setSelectedUser(user);
     onEditModalOpen();
   };
+
+  const handleOpenDeleteDialog = (user) => {
+    setUserToDelete(user);
+    setDeleteDialogOpen(true);
+  };
+  
 
   const indexOfLastUser = currentPage * usersPerPage;
   const indexOfFirstUser = indexOfLastUser - usersPerPage;
@@ -218,9 +253,10 @@ const UserList = () => {
                             <FiEdit3 />
                           </a>
 
-                            <a href="#" className="text-gray-400 hover:text-gray-100 ml-2" onClick={() => handleDeleteBlog()}>
-                              <RiDeleteBin6Line />
-                            </a>
+                          <a href="#" className="text-gray-400 hover:text-gray-100 ml-2" onClick={() => handleOpenDeleteDialog(user)}>
+  <RiDeleteBin6Line />
+</a>
+
                           </td>
                         </tr>
                       ))}
@@ -337,6 +373,35 @@ const UserList = () => {
           </ModalBody>
         </ModalContent>
       </Modal>
+
+
+{/* delete modal  */}
+<AlertDialog
+  isOpen={isDeleteDialogOpen}
+  leastDestructiveRef={cancelRef}
+  onClose={() => setDeleteDialogOpen(false)}
+>
+  <AlertDialogOverlay>
+    <AlertDialogContent>
+      <AlertDialogHeader fontSize="lg" fontWeight="bold">
+        Delete User
+      </AlertDialogHeader>
+
+      <AlertDialogBody>
+        Are you sure you want to delete {userToDelete?.name}?
+      </AlertDialogBody>
+
+      <AlertDialogFooter>
+        <Button ref={cancelRef} onClick={() => setDeleteDialogOpen(false)}>
+          Cancel
+        </Button>
+        <Button colorScheme="red" onClick={handleDeleteUser}>
+          Delete
+        </Button>
+      </AlertDialogFooter>
+    </AlertDialogContent>
+  </AlertDialogOverlay>
+</AlertDialog>
 
 
       </div>
