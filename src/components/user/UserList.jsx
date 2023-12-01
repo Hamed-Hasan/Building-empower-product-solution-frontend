@@ -34,6 +34,7 @@ import { useEffect } from 'react';
 import api from '../../utils/api';
 import EditUserForm from './EditUserForm';
 import AddUserForm from './AddUserForm';
+import "../../styles/styles.css"
 
 
 const disabledButtonBackgroundColor = "#6B7280"; // Gray color for disabled buttons
@@ -45,6 +46,7 @@ const UserList = () => {
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedUser, setSelectedUser] = useState(null);
+  console.log(selectedUser)
   const [isDeleteDialogOpen, setDeleteDialogOpen] = useState(false);
 const [userToDelete, setUserToDelete] = useState(null);
 const [allUsers, setAllUsers] = useState([]);
@@ -55,6 +57,15 @@ const cancelRef = useRef();
   const usersPerPage = 5; // Number of users to display per page
   const { data: users, isLoading, isError } = useGetAllUsersQuery();
 // console.log(users)
+
+
+const formatDate = (dateString) => {
+  const options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', timeZoneName: 'short' };
+  const formattedDate = new Date(dateString).toLocaleDateString('en-US', options);
+  return formattedDate;
+};
+
+
 
   useEffect(() => {
     // Update filteredItems when items are successfully fetched
@@ -339,34 +350,27 @@ const cancelRef = useRef();
     <main className="mt-10">
       {/* Check if a user is selected before rendering the modal content */}
       {selectedUser && (
-        <div className="mb-4 md:mb-0 w-full max-w-screen-md mx-auto relative" style={{ height: '24em' }}>
-          <div className="absolute left-0 bottom-0 w-full h-full z-10"
-            style={{
-              backgroundImage: 'linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.7))',
-            }}
-          ></div>
-          <div className="p-4 absolute bottom-0 left-0 z-20">
+        <div className="mb-4 md:mb-0 w-full max-w-screen-sm mx-auto relative " style={{ height: '16em' }}>
+         
+         <div className="p-16 absolute bottom-0 left-0 z-20 ">
             <a
               href="#"
-              className="px-4 py-1 bg-black text-gray-200 inline-flex items-center justify-center mb-2"
+              className="px-4 py-1 bg-green-700 rounded-md text-gray-200 inline-flex items-center justify-center mb-2"
             >
-              badges
+              {selectedUser.created_by}
             </a>
             <h2 className="text-4xl font-semibold text-gray-100 leading-tight">{selectedUser.name}</h2>
             <div className="flex mt-3">
               <div>
-                <p className="font-semibold text-gray-200 text-sm">Author </p>
-                <p className="font-semibold text-gray-400 text-xs">Published </p>
+                <p className="font-semibold text-gray-200 text-sm">Author {selectedUser.email}</p>
+                <p className="font-semibold text-gray-400 text-xs">Published {formatDate(selectedUser.created_at)}</p>
               </div>
             </div>
           </div>
         </div>
       )}
 
-      {/* Additional content for the modal if needed */}
-      <div className="px-4 lg:px-0 mt-12 text-gray-400 max-w-screen-md mx-auto text-lg leading-relaxed">
-        {/* Display additional user information if needed */}
-      </div>
+    
     </main>
   </ModalContent>
 </Modal>
@@ -423,7 +427,7 @@ const cancelRef = useRef();
       </AlertDialogBody>
 
       <AlertDialogFooter>
-        <Button ref={cancelRef} onClick={() => setDeleteDialogOpen(false)}>
+        <Button marginRight="20px" ref={cancelRef} onClick={() => setDeleteDialogOpen(false)}>
           Cancel
         </Button>
         <Button colorScheme="red" onClick={handleDeleteUser}>

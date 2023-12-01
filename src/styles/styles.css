@@ -135,3 +135,13 @@ button::before {
   color: #fff; /* Set the color of the icon */
   font-size: 18px; 
 }
+
+
+.css-3k766p,.css-pv22qu {
+  background: #000000b8 !important;
+  color: white !important;
+}
+
+.add-user-bg{
+  background-color: #00000069;
+}
