@@ -25,7 +25,9 @@ import Loading from '../../shared/Loading/Loading';
 import {  useGetAllUsersQuery, useGetItemsQuery } from '../../services/authQueries';
 import { useState } from 'react';
 import { useEffect } from 'react';
-import SingleUser from './SingleUser';
+import api from '../../utils/api';
+import EditUserForm from './EditUserForm';
+
 
 const disabledButtonBackgroundColor = "#6B7280"; // Gray color for disabled buttons
 const activeButtonBackgroundColor = "#E99400"; // Default button background color
@@ -71,6 +73,34 @@ const UserList = () => {
     setSortOrder(sortOrder === "asc" ? "desc" : "asc");
   };
 
+
+  const handleUpdateUser = async (updatedUserData) => {
+    try {
+      // Make API call to update user
+      const response = await api.put(`/users/${selectedUser._id}`, updatedUserData);
+  
+      // Check if the update was successful
+      if (response.data.status === 'success') {
+        // Update local state with the updated user data
+        setFilteredUsers((prevUsers) =>
+          prevUsers.map((user) => (user._id === selectedUser._id ? { ...user, ...updatedUserData } : user))
+        );
+  
+        // Optionally, you can also update the selectedUser state if needed
+        setSelectedUser((prevUser) => ({ ...prevUser, ...updatedUserData }));
+  
+        // Display a success toast
+        toast.success('User updated successfully');
+      } else {
+        // Display an error toast if the update fails
+        toast.error('Failed to update user');
+      }
+    } catch (error) {
+      console.error('Error updating user:', error);
+      toast.error('Internal Server Error');
+    }
+  };
+  
   const { isOpen: isShowModalOpen, onOpen: onShowModalOpen, onClose: onShowModalClose } = useDisclosure();
   const { isOpen: isAddModalOpen, onOpen: onAddModalOpen, onClose: onAddModalClose } = useDisclosure();
   const { isOpen: isEditModalOpen, onOpen: onEditModalOpen, onClose: onEditModalClose } = useDisclosure();
@@ -84,7 +114,8 @@ const UserList = () => {
     onAddModalOpen();
   };
 
-  const handleEditModal = () => {
+  const handleEditModal = (user) => {
+    setSelectedUser(user);
     onEditModalOpen();
   };
 
@@ -182,9 +213,10 @@ const UserList = () => {
                             <a href="#" className="text-gray-400 hover:text-gray-100 ml-2" onClick={() => handleAddModal()}>
                               <MdAddchart />
                             </a>
-                            <a href="#" className="text-gray-400 hover:text-gray-100 ml-2" onClick={() => handleEditModal()}>
-                              <FiEdit3 />
-                            </a>
+                            <a href="#" className="text-gray-400 hover:text-gray-100 ml-2" onClick={() => handleEditModal(user)}>
+                            <FiEdit3 />
+                          </a>
+
                             <a href="#" className="text-gray-400 hover:text-gray-100 ml-2" onClick={() => handleDeleteBlog()}>
                               <RiDeleteBin6Line />
                             </a>
@@ -294,16 +326,17 @@ const UserList = () => {
 
         {/* Edit Modal */}
         <Modal isCentered isOpen={isEditModalOpen} onClose={onEditModalClose}>
-          <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px) hue-rotate(90deg)" />
-          <ModalContent>
-            <ModalHeader color="whiteAlpha.800">Edit Blog</ModalHeader>
-            <ModalCloseButton />
-            <ModalBody>
-              {/* Display the BlogUpdateForm component */}
-              update blog
-            </ModalBody>
-          </ModalContent>
-        </Modal>
+        <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px) hue-rotate(90deg)" />
+        <ModalContent>
+          <ModalHeader color="whiteAlpha.800">Edit User</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            {/* Display the EditUserForm component */}
+            <EditUserForm user={selectedUser} onUpdate={handleUpdateUser} onClose={onEditModalClose} />
+          </ModalBody>
+        </ModalContent>
+      </Modal>
+
 
       </div>
     </div>
