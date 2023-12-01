@@ -22,7 +22,7 @@ import Swal from 'sweetalert2';
 import { toast } from 'react-hot-toast';
 import SearchBar from '../../common/SearchBar';
 import Loading from '../../shared/Loading/Loading';
-import {  useGetAllUsersQuery, useGetItemsQuery } from '../../services/authQueries';
+import {  updateUser, useGetAllUsersQuery, useGetItemsQuery } from '../../services/authQueries';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import api from '../../utils/api';
@@ -77,10 +77,10 @@ const UserList = () => {
   const handleUpdateUser = async (updatedUserData) => {
     try {
       // Make API call to update user
-      const response = await api.put(`/users/${selectedUser._id}`, updatedUserData);
+      const response = await updateUser(selectedUser._id, updatedUserData);
   
       // Check if the update was successful
-      if (response.data.status === 'success') {
+      if (response.status === 'success') {
         // Update local state with the updated user data
         setFilteredUsers((prevUsers) =>
           prevUsers.map((user) => (user._id === selectedUser._id ? { ...user, ...updatedUserData } : user))
@@ -100,6 +100,7 @@ const UserList = () => {
       toast.error('Internal Server Error');
     }
   };
+  
   
   const { isOpen: isShowModalOpen, onOpen: onShowModalOpen, onClose: onShowModalClose } = useDisclosure();
   const { isOpen: isAddModalOpen, onOpen: onAddModalOpen, onClose: onAddModalClose } = useDisclosure();
