@@ -83,7 +83,18 @@ export const getItems = async () => {
   
   
   
+  export const createUser = async (userData) => {
+    try {
+        // Make a POST request to the endpoint for creating a user
+        const response = await api.post('/users/create-user', userData);
 
+        // Return the response data
+        return response.data;
+    } catch (error) {
+        // Handle errors, log them, or throw them to be caught by the calling function
+        throw error;
+    }
+};
 
 
 
@@ -141,21 +152,21 @@ export const deleteUser = async (userId) => {
 };
 
 // Create a new user
-const createUser = async (userData) => {
-  const response = await api.post('/users/create-user', userData);
-  return response.data.data;
-};
+// const createUser = async (userData) => {
+//   const response = await api.post('/users/create-user', userData);
+//   return response.data.data;
+// };
 
-export const useCreateUserMutation = () => {
-  const queryClient = useQueryClient();
+// export const useCreateUserMutation = () => {
+//   const queryClient = useQueryClient();
 
-  return useMutation(createUser, {
-    onSuccess: () => {
-      // Optionally, refetch the allUsers query after a successful mutation
-      queryClient.refetchQueries('allUsers');
-    },
-  });
-};
+//   return useMutation(createUser, {
+//     onSuccess: () => {
+//       // Optionally, refetch the allUsers query after a successful mutation
+//       queryClient.refetchQueries('allUsers');
+//     },
+//   });
+// };
 
 // Update a user by ID
 // const updateUser = async (userId, userData) => {

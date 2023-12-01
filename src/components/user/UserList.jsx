@@ -28,11 +28,12 @@ import Swal from 'sweetalert2';
 import { toast } from 'react-hot-toast';
 import SearchBar from '../../common/SearchBar';
 import Loading from '../../shared/Loading/Loading';
-import {  deleteUser, updateUser, useGetAllUsersQuery, useGetItemsQuery } from '../../services/authQueries';
+import {  createUser, deleteUser, updateUser, useGetAllUsersQuery, useGetItemsQuery } from '../../services/authQueries';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import api from '../../utils/api';
 import EditUserForm from './EditUserForm';
+import AddUserForm from './AddUserForm';
 
 
 const disabledButtonBackgroundColor = "#6B7280"; // Gray color for disabled buttons
@@ -46,6 +47,8 @@ const UserList = () => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [isDeleteDialogOpen, setDeleteDialogOpen] = useState(false);
 const [userToDelete, setUserToDelete] = useState(null);
+const [allUsers, setAllUsers] = useState([]);
+
 const cancelRef = useRef();
 
 
@@ -56,6 +59,7 @@ const cancelRef = useRef();
   useEffect(() => {
     // Update filteredItems when items are successfully fetched
     if (users) {
+      setAllUsers(users);
       setFilteredUsers(users);
     }
   }, [users]);
@@ -125,6 +129,34 @@ const cancelRef = useRef();
       }
     } catch (error) {
       console.error('Error deleting user:', error);
+      toast.error('Internal Server Error');
+    }
+  };
+
+  const handleAddUser = async (newUserData) => {
+    try {
+      // Make API call to add a new user using the createUser function
+      const response = await createUser(newUserData);
+
+      // Check if the creation was successful
+      if (response.status === 'success') {
+        // Update local state with the new user
+        setAllUsers((prevUsers) => [...prevUsers, response.data]); // assuming the new user is in response.data
+
+        // Update the filteredUsers state
+        setFilteredUsers((prevUsers) => [...prevUsers, response.data]);
+
+        // Optionally, you can update the selectedUser state if needed
+        // setSelectedUser(response.data);
+
+        // Display a success toast
+        toast.success('User created successfully');
+      } else {
+        // Display an error toast if the creation fails
+        toast.error(`Failed to create user. Server response: ${response.status}`);
+      }
+    } catch (error) {
+      console.error('Error creating user:', error);
       toast.error('Internal Server Error');
     }
   };
@@ -254,8 +286,8 @@ const cancelRef = useRef();
                           </a>
 
                           <a href="#" className="text-gray-400 hover:text-gray-100 ml-2" onClick={() => handleOpenDeleteDialog(user)}>
-  <RiDeleteBin6Line />
-</a>
+                          <RiDeleteBin6Line />
+                        </a>
 
                           </td>
                         </tr>
@@ -342,24 +374,23 @@ const cancelRef = useRef();
 
 
         {/* Add Modal */}
-        {/* Implement your Add modal content here */}
-        <Modal isCentered isOpen={isAddModalOpen} onClose={onAddModalClose} size='2xl'>
-          {/* Add modal content */}
-          {/* Implement your Add modal content here */}
-          <ModalOverlay
-            bg='blackAlpha.300'
-            backdropFilter='blur(10px) hue-rotate(90deg)'
-          />
-          <ModalContent>
-            <ModalCloseButton />
-            <ModalBody>
-              {/* Add modal body */}
-              {/* Implement your Add modal body content here */}
-              {/* <AddBlog onClose={onAddModalClose}/> */}
-              add
-            </ModalBody>
-          </ModalContent>
-        </Modal>
+      {/* Implement your Add modal content here */}
+      <Modal isCentered isOpen={isAddModalOpen} onClose={onAddModalClose} size='2xl'>
+        {/* Add modal content */}
+        {/* Use the AddUserForm component */}
+        <ModalOverlay
+          bg='blackAlpha.300'
+          backdropFilter='blur(10px) hue-rotate(90deg)'
+        />
+        <ModalContent>
+          <ModalCloseButton />
+          <ModalBody>
+            {/* Add modal body */}
+            {/* Use the AddUserForm component */}
+            <AddUserForm onClose={onAddModalClose} onAddUser={handleAddUser} />
+          </ModalBody>
+        </ModalContent>
+      </Modal>
 
         {/* Edit Modal */}
         <Modal isCentered isOpen={isEditModalOpen} onClose={onEditModalClose}>
