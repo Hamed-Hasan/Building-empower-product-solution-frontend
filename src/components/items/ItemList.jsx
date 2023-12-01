@@ -2,7 +2,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React from 'react';
 import { useState,useEffect } from 'react';
-import '../Table/Table.css';
+import '../../pages/Table/Table.css';
 import { BiShowAlt } from 'react-icons/bi';
 import { MdAddchart } from 'react-icons/md';
 import { FiEdit3 } from 'react-icons/fi';

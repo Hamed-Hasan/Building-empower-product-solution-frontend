@@ -4,8 +4,8 @@ import { FcDownLeft, FcDownRight } from 'react-icons/fc';
 import { useNavigate } from 'react-router-dom'; // Step 1
 
 import '../../styles/styles.css';
-import UserList from '../user/UserList';
-import ItemList from '../items/ItemList';
+import UserList from '../../components/user/UserList';
+import ItemList from '../../components/items/ItemList';
 
 const Table = () => {
   const navigate = useNavigate(); // Step 2
