@@ -387,7 +387,7 @@ const formatDate = (dateString) => {
           backdropFilter='blur(10px) hue-rotate(90deg)'
         />
         <ModalContent>
-          <ModalCloseButton />
+          <ModalCloseButton  margin="60px" />
           <ModalBody>
             {/* Add modal body */}
             {/* Use the AddUserForm component */}
@@ -397,15 +397,12 @@ const formatDate = (dateString) => {
       </Modal>
 
         {/* Edit Modal */}
-        <Modal isCentered isOpen={isEditModalOpen} onClose={onEditModalClose}>
+        <Modal isCentered isOpen={isEditModalOpen} onClose={onEditModalClose} size='2xl'>
         <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px) hue-rotate(90deg)" />
         <ModalContent>
-          <ModalHeader color="whiteAlpha.800">Edit User</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            {/* Display the EditUserForm component */}
+          <ModalCloseButton margin="40px" />
+        
             <EditUserForm user={selectedUser} onUpdate={handleUpdateUser} onClose={onEditModalClose} />
-          </ModalBody>
         </ModalContent>
       </Modal>
 
