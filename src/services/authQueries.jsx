@@ -125,7 +125,7 @@ export const useGetAllUsersQuery = () => {
 export const getUserById = async (userId) => {
   try {
     const response = await api.get(`/users/${userId}`);
-    console.log('response:', response);
+    // console.log('response:', response);
     return response.data;
   } catch (error) {
     console.error('Error fetching user data:', error);

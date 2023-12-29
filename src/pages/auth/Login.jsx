@@ -32,7 +32,7 @@ const Login = () => {
                 duration: 3000,
             });
 
-            console.log(data);
+            // console.log(data);
             navigate('/table');
         } catch (error) {
             console.error(error);
