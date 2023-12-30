@@ -1,18 +1,18 @@
-# Arraytics Product Solution Frontend
+# Empowering Energy Product Solution
 
 ## Overview
 
-Welcome to the Arraytics Product Solution Frontend! This dynamic and modern user interface complements the powerful backend, providing a seamless experience for managing Arraytics product solutions. The frontend is crafted with cutting-edge technologies, ensuring a responsive and intuitive interface for users.
+ Proven track record in MERN stack development. Adept at building advanced features, as showcased by the implementation of a seamless file upload system. Skilled in integrating JavaScript libraries like FileReader API for efficient file handling and PDF.js for PDF viewing and annotation. Excels in UI/UX design, ensuring responsive and visually appealing interfaces. Proficient in user and item management with search, pagination, and CRUD operations, complemented by a custom JWT-based authentication system. Committed to code quality, readability, and modularity, with meticulous attention to detail. Eager to contribute technical excellence to impactful projects.
 
 
-**View the live site frontend [here](https://arraytics-product-solution.vercel.app).**
+**View the live site frontend [here](https://empowering-energy.netlify.app).**
 
 **View the live site backend [here](https://arraytics-product-solution-backend.vercel.app).**
 
-## Arraytics Product Solution Management System 🚀
+## Empowering Energy Product Solution Management System 🚀
 
 
-![Arraytics Solution](https://i.ibb.co/Stg9h4D/arraytcs-web.png)
+![Empowering Energy Solution](https://i.ibb.co/Stg9h4D/arraytcs-web.png)
 
 # Entity-Relationship Diagram (ERD)
 
@@ -32,7 +32,7 @@ Welcome to the Arraytics Product Solution Frontend! This dynamic and modern user
 ```
 
 
-# Arraytics API Endpoints
+# API Endpoints
 
 ## Main Route
 
@@ -190,25 +190,41 @@ Certainly! Here are the API endpoints and JSON data for the provided code with e
 
 ## Frontend Features and Technologies 🌐
 
-**Features:**
-- User Interface for Arraytics Product Solution Management System 🚀
-- Authentication UI 🛡️
-- Item Management UI 📦
-- User Management UI 👤
+## Features
+- **Upload Functionality:**
+  - Create a button for initiating the file upload process.
+  - Develop a form allowing users to select/upload an image or PDF from their device or take a photo.
 
-**Technologies:**
-- React for building user interfaces ⚛️
-- Vite for frontend tooling and development 🛠️
-- Chakra UI for building accessible and themeable UI components 👩‍🎨
-- Emotion for styling components with JavaScript 💅
-- Axios for making HTTP requests 🌐
-- Framer Motion for creating smooth animations 🔄
-- React Query for data fetching and state management 📊
-- React Router for navigation 🚦
-- React Icons for including popular icon sets 🎨
-- Yup for form validation 📝
-- SweetAlert2 for displaying beautiful alerts 🍬
-- Tailwind CSS for utility-first styling 🎨
+- **File Type Handling:**
+  - Verify the selected file's type (image, PDF, etc.).
+  - Display the selected file in a viewer within the browser.
+
+- **Highlighting Feature:**
+  - Implement a tool enabling users to highlight specific areas (like invoice numbers) within the displayed image or PDF.
+  - Enable updating the file with highlighted information.
+
+## Technologies
+- **Frontend:**
+  - React for building user interfaces ⚛️
+  - Vite for frontend tooling and development 🛠️
+  - Chakra UI for building accessible and themeable UI components 👩‍🎨
+  - Emotion for styling components with JavaScript 💅
+  - Axios for making HTTP requests 🌐
+  - Framer Motion for creating smooth animations 🔄
+  - React Query for data fetching and state management 📊
+  - React Router for navigation 🚦
+  - React Icons for including popular icon sets 🎨
+  - Yup for form validation 📝
+  - SweetAlert2 for displaying beautiful alerts 🍬
+  - Tailwind CSS for utility-first styling 🎨
+
+## Additional Information
+- Use relevant JavaScript libraries for file handling, such as FileReader API for uploading and displaying files.
+- For PDF viewing and annotation, consider using libraries like PDF.js or other suitable options.
+- For image highlighting, utilize canvas or image editing libraries.
+- Ensure compatibility across browsers/devices and responsive design principles.
+- Bonus points for clean UI/UX and performance optimization.
+
 
 # Installation Frontend - Backend
 
@@ -218,8 +234,8 @@ To make the installation process for both the frontend and backend repositories 
 
 1. **Clone the Repository:**
    ```bash
-   git clone https://github.com/Hamed-Hasan/Building-arraytics-product-solution-backend
-   cd arraytics-product-solution-backend
+   git clone https://github.com/Hamed-Hasan/Building-empower-product-solution-backend.git
+   cd empower-product-solution-backend
    ```
 
 2. **Install Dependencies:**
@@ -244,8 +260,8 @@ To make the installation process for both the frontend and backend repositories 
 
 1. **Clone the Repository:**
    ```bash
-   git clone https://github.com/Hamed-Hasan/Building-arraytics-product-solution-frontend
-   cd arraytics-product-solution-frontend
+   git clone https://github.com/Hamed-Hasan/Building-empower-product-solution-frontend.git
+   cd empower-product-solution-frontend
    ```
 
 2. **Install Dependencies:**
@@ -266,6 +282,6 @@ To make the installation process for both the frontend and backend repositories 
 5. **Verify Frontend Installation:**
    Open your browser and go to [http://localhost:5471](http://localhost:5471) to verify that the frontend application is running.
 
-Now, you have both the backend and frontend up and running. You can explore the Arraytics Product Solution Management System by navigating through the provided routes and endpoints.
+Now, you have both the backend and frontend up and running. You can explore the Empowering Energy Product Solution Management System by navigating through the provided routes and endpoints.
 
 Feel free to reach out if you encounter any issues during the installation process or if you have any questions about the codebase!

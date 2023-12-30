@@ -2,7 +2,6 @@ import { createBrowserRouter } from "react-router-dom";
 import Login from "../pages/auth/Login";
 import Signup from "../pages/auth/Signup";
 import Table from "../pages/Table/Table";
-import BlurBg from "../components/uploads/BlurBg";
 
 const router = createBrowserRouter([
     {

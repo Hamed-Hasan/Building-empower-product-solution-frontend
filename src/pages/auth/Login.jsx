@@ -71,8 +71,8 @@ const Login = () => {
                                         <TypeWriter />
                                     </div>
                                 </div>
-                                <p className='font-normal text-left opacity-80'>
-                                    Embark on a coding odyssey with Arraytics! Conquer our JavaScript take-home exam by crafting an elegant MERN Shopping App. Securely separate frontend and backend, authenticate through APIs, showcase data with flair, and dockerize for seamless deployment. Keep it simple, impress at Arraytics!
+                                <p className='font-normal text-left text-slate-300 opacity-90'>
+                                Experienced Full Stack Developer and Data Scientist, skilled in MERN stack. Expertise in dynamic file uploads, advanced features in images/PDFs, and robust user/item management systems. Track record of high-quality, user-centric code prioritizing functionality and modularity.
                                 </p>
                             </div>
                         </div>
