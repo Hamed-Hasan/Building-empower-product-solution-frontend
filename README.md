@@ -12,7 +12,7 @@
 ## Empowering Energy Product Solution Management System 🚀
 
 
-![Empowering Energy Solution](https://i.ibb.co/Stg9h4D/arraytcs-web.png)
+![Empowering Energy Solution](https://i.ibb.co/192QS89/uploads-bg.png)
 
 # Entity-Relationship Diagram (ERD)
 
